@@ -1,0 +1,1 @@
+﻿#include "InteractiveObjectData.h"
