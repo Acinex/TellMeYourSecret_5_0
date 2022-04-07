@@ -1,0 +1,14 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "h:\\daten\\unreal\\tellmeyoursecret\\plugins\\gamefeatures\\week1\\source\\week1runtime\\private\\week1runtimemodule.cpp",
+        "ProvidedModule": "",
+        "PCH": "h:\\daten\\unreal\\tellmeyoursecret\\intermediate\\build\\win64\\tellmeyoursecreteditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "h:\\daten\\unreal\\tellmeyoursecret\\plugins\\gamefeatures\\week1\\intermediate\\build\\win64\\unrealeditor\\development\\week1runtime\\definitions.week1runtime.h",
+            "h:\\daten\\unreal\\tellmeyoursecret\\plugins\\gamefeatures\\week1\\source\\week1runtime\\public\\week1runtimemodule.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
