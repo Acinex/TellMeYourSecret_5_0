@@ -20,4 +20,9 @@ protected:
 	void ConvertIntoInstance(FVector Location, bool bAtCenter, bool bCreateWithMultipleMeshes);
 	UFUNCTION(CallInEditor)
 	void MergeInstances();
+	UFUNCTION(CallInEditor)
+	void SplitInstance();
+
+private:
+	static UWorld* GetWorld();
 };

@@ -95,6 +95,7 @@ void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCent
 			FTransform Transform = MeshActor->GetActorTransform();
 			Transform.SetLocation(Transform.GetLocation() - FinalLocation);
 			InstancedMesh->GetMeshComponent(MeshActor->GetStaticMeshComponent()->GetStaticMesh())->AddInstance(Transform);
+			InstancedMesh->SetFolderPath(MeshActor->GetFolderPath());
 			UKismetSystemLibrary::CreateCopyForUndoBuffer(MeshActor);
 			MeshActor->Destroy();
 		}
@@ -108,22 +109,10 @@ void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCent
 
 void UStaticMeshEditor::MergeInstances()
 {
-	const TIndirectArray<FWorldContext> WorldContexts = GEngine->GetWorldContexts();
-
-	UE_LOG(LogTellMeYourSecret, Display, TEXT("Trying to get World : %i"), WorldContexts.Num())
-	UWorld* World = nullptr;
-
-	for (const FWorldContext WorldContext : WorldContexts)
-	{
-		if (WorldContext.WorldType == EWorldType::Editor)
-		{
-			World = WorldContext.World();
-		}
-	}
+	const UWorld* World = GetWorld();
 
 	if (!World)
 	{
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("No World"))
 		return;
 	}
 
@@ -167,27 +156,111 @@ void UStaticMeshEditor::MergeInstances()
 
 	for (AInstancedMeshBase* Mesh : InstancedMeshes)
 	{
-		
 		TArray<UHierarchicalInstancedStaticMeshComponent*> MeshComponents;
 		Mesh->GetComponents<UHierarchicalInstancedStaticMeshComponent>(MeshComponents);
 		for (const UHierarchicalInstancedStaticMeshComponent* MeshComponent : MeshComponents)
 		{
 			const int32 InstanceCount = MeshComponent->GetInstanceCount();
 
-			for(int32 I = 0; I < InstanceCount; I++)
+			for (int32 I = 0; I < InstanceCount; I++)
 			{
 				FTransform Transform;
 				MeshComponent->GetInstanceTransform(I, Transform, true);
 				InstancedMesh->GetMeshComponent(MeshComponent->GetStaticMesh())->AddInstance(Transform, true);
 			}
 		}
-		
+
 		UKismetSystemLibrary::CreateCopyForUndoBuffer(Mesh);
 		Mesh->Destroy();
 	}
-	
+
 	if (GEditor)
 	{
 		GEditor->SelectActor(InstancedMesh, true, true, true);
 	}
+}
+
+void UStaticMeshEditor::SplitInstance()
+{
+	UWorld* World = GetWorld();
+
+	if (!World)
+	{
+		return;
+	}
+
+	TArray<AInstancedMeshBase*> InstancedMeshes;
+
+	for (AActor* Actor : UEditorUtilityLibrary::GetSelectionSet())
+	{
+		if (AInstancedMeshBase* InstancedMesh = Cast<AInstancedMeshBase>(Actor))
+		{
+			InstancedMeshes.Add(InstancedMesh);
+		}
+	}
+
+	if (InstancedMeshes.Num() < 1)
+	{
+		return UKismetSystemLibrary::PrintString(World, TEXT("You need at least one selected instanced Mesh to use this action"));
+	}
+
+	AStaticMeshActor* LastSpawned = nullptr;
+
+	for (AInstancedMeshBase* Mesh : InstancedMeshes)
+	{
+		TArray<UHierarchicalInstancedStaticMeshComponent*> MeshComponents;
+		Mesh->GetComponents<UHierarchicalInstancedStaticMeshComponent>(MeshComponents);
+		for (const UHierarchicalInstancedStaticMeshComponent* MeshComponent : MeshComponents)
+		{
+			const int32 InstanceCount = MeshComponent->GetInstanceCount();
+
+			for (int32 I = 0; I < InstanceCount; I++)
+			{
+				FTransform Transform;
+				MeshComponent->GetInstanceTransform(I, Transform, true);
+
+				AStaticMeshActor* SpawnActor = World->SpawnActor<AStaticMeshActor>(Transform.GetLocation(), Transform.Rotator());
+				LastSpawned = SpawnActor;
+
+				SpawnActor->SetActorLabel(Mesh->GetActorLabel());
+				SpawnActor->GetStaticMeshComponent()->SetStaticMesh(MeshComponent->GetStaticMesh());
+				SpawnActor->SetFolderPath(Mesh->GetFolderPath());
+
+				UKismetSystemLibrary::CreateCopyForUndoBuffer(SpawnActor);
+			}
+		}
+
+
+		UKismetSystemLibrary::CreateCopyForUndoBuffer(Mesh);
+		Mesh->Destroy();
+	}
+
+	if (GEditor)
+	{
+		GEditor->SelectActor(LastSpawned, true, true, true);
+	}
+}
+
+UWorld* UStaticMeshEditor::GetWorld()
+{
+	const TIndirectArray<FWorldContext> WorldContexts = GEngine->GetWorldContexts();
+
+	UE_LOG(LogTellMeYourSecret, Display, TEXT("Trying to get World : %i"), WorldContexts.Num())
+	UWorld* World = nullptr;
+
+	for (const FWorldContext WorldContext : WorldContexts)
+	{
+		if (WorldContext.WorldType == EWorldType::Editor)
+		{
+			World = WorldContext.World();
+		}
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogTellMeYourSecret, Error, TEXT("No World"))
+		return nullptr;
+	}
+
+	return World;
 }
