@@ -13,26 +13,14 @@
 
 void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCenter, bool bCreateWithMultipleMeshes)
 {
-	FVector FinalLocation = Location;
-
-	const TIndirectArray<FWorldContext> WorldContexts = GEngine->GetWorldContexts();
-
-	UE_LOG(LogTellMeYourSecret, Display, TEXT("Trying to get World : %i"), WorldContexts.Num())
-	UWorld* World = nullptr;
-
-	for (const FWorldContext WorldContext : WorldContexts)
-	{
-		if (WorldContext.WorldType == EWorldType::Editor)
-		{
-			World = WorldContext.World();
-		}
-	}
+	UWorld* World = TryGetWorld();
 
 	if (!World)
 	{
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("No World"))
 		return;
 	}
+	
+	FVector FinalLocation = Location;
 
 	TArray<AActor*> Actors;
 	TArray<ULevel*> UniqueLevels;
@@ -109,7 +97,7 @@ void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCent
 
 void UStaticMeshEditor::MergeInstances()
 {
-	const UWorld* World = GetWorld();
+	const UWorld* World = TryGetWorld();
 
 	if (!World)
 	{
@@ -182,7 +170,7 @@ void UStaticMeshEditor::MergeInstances()
 
 void UStaticMeshEditor::SplitInstance()
 {
-	UWorld* World = GetWorld();
+	UWorld* World = TryGetWorld();
 
 	if (!World)
 	{
@@ -241,7 +229,7 @@ void UStaticMeshEditor::SplitInstance()
 	}
 }
 
-UWorld* UStaticMeshEditor::GetWorld()
+UWorld* UStaticMeshEditor::TryGetWorld()
 {
 	const TIndirectArray<FWorldContext> WorldContexts = GEngine->GetWorldContexts();
 

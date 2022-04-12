@@ -24,5 +24,5 @@ protected:
 	void SplitInstance();
 
 private:
-	static UWorld* GetWorld();
+	static UWorld* TryGetWorld();
 };
