@@ -25,8 +25,9 @@ public:
     virtual void NativeConstruct() override;
     virtual void NativeOnInitialized() override;
     
-    void SetAvailableMessages(const ECharacterIdentifier Recipient, TArray<FText> Messages) const;
     void OpenChat(ECharacterIdentifier Identifier);
+
+    UChatMessage* SendChatMessage(const ECharacterIdentifier Sender, const ECharacterIdentifier Recipient, const FText Message, TArray<FText> Answers);
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(BindWidget))
@@ -47,4 +48,8 @@ private:
     void OpenChat(UObject* SelectedItem);
     UFUNCTION()
     void Send(UWidgetStudioButtonBase* Button);
+    UFUNCTION()
+    void OnNotification(const UAppWidget* App);
+
+    void UpdateChatList();
 };

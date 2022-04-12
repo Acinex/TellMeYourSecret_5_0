@@ -64,8 +64,7 @@ struct TELLMEYOURSECRET_API FPhoneData
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TMap<ECharacterIdentifier, FAvailableMessages> AvailableResponses;
 
-	FChat& GetChat(ECharacterIdentifier CharacterIdentifier);
-
+	FChat& GetChat(const ECharacterIdentifier CharacterIdentifier);
 	
 	friend FArchive& operator<<(FArchive& Ar, FPhoneData& Data)
 	{

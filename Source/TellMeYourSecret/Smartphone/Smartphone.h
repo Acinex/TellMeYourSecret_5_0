@@ -56,7 +56,7 @@ public:
 	void SetPhoneData(const FPhoneData InPhoneData) { PhoneData = InPhoneData; }
 
 	UFUNCTION(BlueprintCallable)
-	void SendChatMessage(const ECharacterIdentifier Sender, const ECharacterIdentifier Recipient, const FText Message, TArray<FText> Messages);
+	void SendChatMessage(const ECharacterIdentifier Sender, const ECharacterIdentifier Recipient, const FText Message, TArray<FText> Messages) const;
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleCamera() const;

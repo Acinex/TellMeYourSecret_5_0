@@ -56,34 +56,16 @@ void USmartphone::SetScreen(UScreenWidget* Screen)
 	}
 }
 
-void USmartphone::SendChatMessage(const ECharacterIdentifier Sender, const ECharacterIdentifier Recipient, const FText Message, TArray<FText> Messages)
+void USmartphone::SendChatMessage(const ECharacterIdentifier Sender, const ECharacterIdentifier Recipient, const FText Message, const TArray<FText> Messages) const
 {
-	if (Recipient == ECharacterIdentifier::Player && Sender == ECharacterIdentifier::Player)
-	{
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("You can't send a message to yourself"))
-		return;
-	}
+	TalkApp->SendChatMessage(Sender, Recipient, Message, Messages);
 
-	if (Recipient != ECharacterIdentifier::Player && Sender != ECharacterIdentifier::Player)
-	{
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("NPC's don't message each other"))
-		return;
-	}
-
-	const ECharacterIdentifier With = Recipient == ECharacterIdentifier::Player ? Sender : Recipient;
-
-	UChatMessage* ChatMessage = NewObject<UChatMessage>(this);
-	ChatMessage->Sender = Sender;
-	ChatMessage->With = With;
-	ChatMessage->Message = Message;
-
-	PhoneData.GetChat(With).Messages.Add(ChatMessage);
+	OnNotification.Broadcast(TalkApp);
 }
 
 void USmartphone::ToggleCamera() const
 {
-	ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	if (PlayerCharacter)
+	if (ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0)))
 	{
 		PlayerCharacter->ToggleSmartphoneCamera();
 	}
@@ -91,8 +73,7 @@ void USmartphone::ToggleCamera() const
 
 void USmartphone::DeactivateCamera() const
 {
-	ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	if (PlayerCharacter)
+	if (ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0)))
 	{
 		PlayerCharacter->DeactivateSmartphoneCamera();
 	}
@@ -153,9 +134,7 @@ void USmartphone::Home()
 
 void USmartphone::Close() const
 {
-	ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
-
-	if (PlayerCharacter)
+	if (ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0)))
 	{
 		PlayerCharacter->ToggleSmartphone();
 	}
@@ -163,8 +142,7 @@ void USmartphone::Close() const
 
 void USmartphone::Show()
 {
-	ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	if (!PlayerCharacter)
+	if (const ISmartphonePlayer* PlayerCharacter = Cast<ISmartphonePlayer>(UGameplayStatics::GetPlayerCharacter(this, 0)); !PlayerCharacter)
 	{
 		return;
 	}
