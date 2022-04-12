@@ -125,7 +125,7 @@ void UTalkApp::Send(UWidgetStudioButtonBase* Button)
 	SendButton->SetIsEnabled(false);
 }
 
-void UTalkApp::OnNotification(const UAppWidget* App)
+void UTalkApp::OnNotification(UAppWidget* App)
 {
 	if (App != this || !IsVisible())
 	{

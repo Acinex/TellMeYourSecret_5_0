@@ -49,7 +49,7 @@ private:
     UFUNCTION()
     void Send(UWidgetStudioButtonBase* Button);
     UFUNCTION()
-    void OnNotification(const UAppWidget* App);
+    void OnNotification(UAppWidget* App);
 
     void UpdateChatList();
 };
