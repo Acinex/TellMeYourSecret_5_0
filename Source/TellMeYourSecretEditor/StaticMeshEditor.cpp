@@ -19,7 +19,7 @@ void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCent
 	{
 		return;
 	}
-	
+
 	FVector FinalLocation = Location;
 
 	TArray<AActor*> Actors;
@@ -207,7 +207,7 @@ void UStaticMeshEditor::SplitInstance()
 				FTransform Transform;
 				MeshComponent->GetInstanceTransform(I, Transform, true);
 
-				AStaticMeshActor* SpawnActor = World->SpawnActor<AStaticMeshActor>(Transform.GetLocation(), Transform.Rotator());
+				AStaticMeshActor* SpawnActor = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Transform);
 				LastSpawned = SpawnActor;
 
 				SpawnActor->SetActorLabel(Mesh->GetActorLabel());
