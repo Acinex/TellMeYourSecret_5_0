@@ -82,6 +82,9 @@ void UStaticMeshEditor::ConvertIntoInstance(const FVector Location, bool bAtCent
 		{
 			FTransform Transform = MeshActor->GetActorTransform();
 			Transform.SetLocation(Transform.GetLocation() - FinalLocation);
+
+			FVector Scale3D = Transform.GetScale3D();
+			Transform.SetScale3D(Scale3D.GetAbs());
 			InstancedMesh->GetMeshComponent(MeshActor->GetStaticMeshComponent()->GetStaticMesh())->AddInstance(Transform);
 			InstancedMesh->SetFolderPath(MeshActor->GetFolderPath());
 			UKismetSystemLibrary::CreateCopyForUndoBuffer(MeshActor);

@@ -1,6 +1,8 @@
 // Copyright Acinex Games 2020
 
 #include "PlayerAnimation.h"
+
+#include "AnimGraphRuntime/Public/KismetAnimationLibrary.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -22,7 +24,7 @@ void UPlayerAnimation::NativeUpdateAnimation(const float DeltaSeconds)
 	FRotator ActorRotation = PawnOwner->GetActorRotation();
 	ActorRotation.Normalize();
 	Speed        = Velocity.Size();
-	Direction    = CalculateDirection(Velocity, ActorRotation);
+	Direction    = UKismetAnimationLibrary::CalculateDirection(Velocity, ActorRotation);
 	bIsCrouching = PawnOwner->GetMovementComponent()->IsCrouching();
 
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(PawnOwner);
