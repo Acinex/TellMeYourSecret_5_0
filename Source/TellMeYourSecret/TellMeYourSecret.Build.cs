@@ -21,7 +21,8 @@ public class TellMeYourSecret : ModuleRules
 			"NavigationSystem",
 			"DeveloperSettings",
 			"Flow",
-			"PhysicsCore"
+			"PhysicsCore",
+			"AnimGraphRuntime"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new[]
