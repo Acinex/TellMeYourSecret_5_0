@@ -59,10 +59,6 @@ void UTellMeYourSecretGameInstance::Init()
 		Settings = NewObject<USettings>(this);
 	}
 
-	if (!Settings)
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("No Save was found or created"))
-
-
 	UGameplayStatics::SetBaseSoundMix(this, GameData->SoundMix);
 
 	for (const auto Tuple : GameData->SoundClasses)
@@ -70,9 +66,7 @@ void UTellMeYourSecretGameInstance::Init()
 		UGameplayStatics::SetSoundMixClassOverride(this, GameData->SoundMix, Tuple.Value, GetVolume(Tuple.Key), 1.0F, 0.0F);
 	}
 
-	USmartphone* Smartphone = GetSubsystem<USmartphone>();
-
-	if (Smartphone)
+	if (USmartphone* Smartphone = GetSubsystem<USmartphone>())
 	{
 		Smartphone->SetSmartphoneData(GetSmartphoneData());
 	}
@@ -183,6 +177,7 @@ void UTellMeYourSecretGameInstance::UpdateVolume(const EVolumeType VolumeType, c
 {
 	if (!Settings)
 	{
+		UE_LOG(LogTellMeYourSecret, Error, TEXT("No Settings present"))
 		return;
 	}
 

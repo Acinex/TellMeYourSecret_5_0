@@ -11,6 +11,7 @@
 #include "Internationalization/Culture.h"
 #include "Kismet/KismetStringLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "TellMeYourSecret/Log.h"
 #include "TellMeYourSecret/GameInstances/TellMeYourSecretGameInstance.h"
 #include "TellMeYourSecret/Model/Save/Settings.h"
 #include "Widgets/WSModernComboBox.h"
@@ -143,6 +144,7 @@ void UOptionControlsWidget::EffectVolumeChanged(const float Value)
 // ReSharper disable once CppMemberFunctionMayBeConst
 void UOptionControlsWidget::MusicVolumeChanged(const float Value)
 {
+	UE_LOG(LogTellMeYourSecret, Log, TEXT("Update Music to %f"), Value)
 	GameInstance->UpdateVolume(EVolumeType::Music, Value / 100);
 }
 
