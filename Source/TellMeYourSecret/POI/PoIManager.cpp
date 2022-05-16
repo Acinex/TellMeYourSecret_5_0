@@ -6,6 +6,7 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "PointOfInterest.h"
+#include "Kismet/GameplayStatics.h"
 #include "TellMeYourSecret/Log.h"
 
 // Sets default values
@@ -28,7 +29,7 @@ void UPoIManager::Register(UObject* PointOfInterest)
 
 FVector UPoIManager::FindRandomSpot(const FGameplayTagContainer Identifier) const
 {
-	UObject* PointOfInterest = FindPoi(Identifier);
+	UObject* PointOfInterest = FindPoi(Identifier, nullptr);
 
 	if (!PointOfInterest)
 	{
@@ -40,16 +41,16 @@ FVector UPoIManager::FindRandomSpot(const FGameplayTagContainer Identifier) cons
 
 FVector UPoIManager::FindRandomSpotForActor(const FGameplayTagContainer Identifier, AActor* Actor) const
 {
-	UObject* PointOfInterest = FindPoi(Identifier);
+	UObject* PointOfInterest = FindPoi(Identifier, Actor);
 
 	if (!PointOfInterest)
 	{
 		return FVector::ZeroVector;
 	}
 
-	FVector          Location;
+	FVector Location;
 	UNavigationPath* NavigationPath;
-	uint8            Tries = 0;
+	uint8 Tries = 0;
 
 	do
 	{
@@ -70,7 +71,7 @@ FVector UPoIManager::FindRandomSpotForActor(const FGameplayTagContainer Identifi
 	return Location;
 }
 
-UObject* UPoIManager::FindPoi(const FGameplayTagContainer Identifier) const
+UObject* UPoIManager::FindPoi(const FGameplayTagContainer Identifier, const AActor* Actor) const
 {
 	TSet<TWeakObjectPtr<UObject>> ComponentsWithAnyTag;
 	for (const FGameplayTag& Tag : Identifier)
@@ -95,6 +96,19 @@ UObject* UPoIManager::FindPoi(const FGameplayTagContainer Identifier) const
 
 	if (ComponentsPerTag.Num())
 	{
+		if (IsValid(Actor))
+		{
+			TArray<AActor*> Actors;
+
+			for (const UObject* Component : ComponentsPerTag)
+			{
+				Actors.Add(Cast<AActor>(Component->GetOuter()));
+			}
+
+			float Distance;
+			return UGameplayStatics::FindNearestActor(Actor->GetActorLocation(), Actors, Distance);
+		}
+
 		return ComponentsPerTag[0];
 	}
 

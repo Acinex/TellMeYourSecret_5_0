@@ -28,5 +28,5 @@ public:
 private:
 	TMultiMap<FGameplayTag, TWeakObjectPtr<UObject>> PointsOfInterest;
 
-	UObject* FindPoi(const FGameplayTagContainer Identifier) const;
+	UObject* FindPoi(const FGameplayTagContainer Identifier, const AActor* Actor) const;
 };
