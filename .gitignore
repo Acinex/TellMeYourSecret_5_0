@@ -88,5 +88,5 @@ CMakeLists.txt
 # lokale Ordner mit m�glichen Inhalten
 
 /Tell-Me-Your-Secret.iml
-
+Plugins/Developer/RiderLink
 Content/GameAssets/WhiteBay/StanfieldResidence/_importedAssests/
