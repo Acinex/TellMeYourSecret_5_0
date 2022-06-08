@@ -44,24 +44,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	USkeletalMeshComponent* GetMesh() const;
 
-	UFUNCTION(BlueprintPure)
-	float GetHunger() const;
-
-	UFUNCTION(BlueprintCallable)
-	void SetHunger(const float Value);
-
-	UFUNCTION(BlueprintPure)
-	float GetHygiene() const;
-
-	UFUNCTION(BlueprintCallable)
-	void SetHygiene(const float Value);
-
-	UFUNCTION(BlueprintPure)
-	float GetSleep() const;
-
-	UFUNCTION(BlueprintCallable)
-	void SetSleep(const float Value);
-
 	UFUNCTION(BlueprintCallable)
 	virtual bool GetLookAtLocation(FVector& LookAtLocation) const;
 
@@ -76,18 +58,6 @@ public:
 	UCharacterData* CharacterData = nullptr;
 
 protected:
-	/** Percentage value of the hygiene */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, BlueprintSetter=SetHygiene)
-	float Hygiene = 1.0F;
-
-	/** Percentage value of the hunger */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, BlueprintSetter=SetHunger)
-	float Hunger = 1.0F;
-
-	/** Percentage value of the hunger */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, BlueprintSetter=SetSleep)
-	float Sleep = 1.0F;
-
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

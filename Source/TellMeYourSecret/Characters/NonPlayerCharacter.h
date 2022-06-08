@@ -20,14 +20,7 @@ public:
 
 	int32 GetReputation() const;
 
-	UBehaviorTree* GetBehaviorTree() const { return BehaviorTree; }
-
 protected:
-	UPROPERTY()
-	UReputationSystem* ReputationSystem = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	UBehaviorTree* BehaviorTree;
 
 	UPROPERTY(Category=Character, VisibleAnywhere, BlueprintReadOnly)
 	UNonPlayerComponent* NonPlayerComponent;

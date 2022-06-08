@@ -84,36 +84,6 @@ USkeletalMeshComponent* UCharacterComponent::GetMesh() const
 	return Character->GetMesh();
 }
 
-float UCharacterComponent::GetHunger() const
-{
-	return Hunger;
-}
-
-void UCharacterComponent::SetHunger(const float Value)
-{
-	Hunger = FMath::Clamp(Value, 0.0F, 1.0F);
-}
-
-float UCharacterComponent::GetHygiene() const
-{
-	return Hygiene;
-}
-
-void UCharacterComponent::SetHygiene(const float Value)
-{
-	Hygiene = FMath::Clamp(Value, 0.0F, 1.0F);
-}
-
-float UCharacterComponent::GetSleep() const
-{
-	return Sleep;
-}
-
-void UCharacterComponent::SetSleep(const float Value)
-{
-	Sleep = FMath::Clamp(Value, 0.0F, 1.0F);
-}
-
 bool UCharacterComponent::GetLookAtLocation(FVector& LookAtLocation) const
 {
 	if (!LookAtActorPtr.IsValid())

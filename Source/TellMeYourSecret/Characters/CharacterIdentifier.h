@@ -15,11 +15,14 @@ enum class ECharacterIdentifier : uint8
     MeganCobb UMETA(DisplayName="Cobb, Megan"),
     VanessaCobb UMETA(DisplayName="Cobb, Vanessa"),
 
-    EstellaStandfield UMETA(DisplayName="Stanfied, Stella"),
+    EstellaStandfield UMETA(DisplayName="Stanfied, EStella"),
     Player UMETA(DisplayName="Player"),
     Father,
 
     ArtyomSokolov UMETA(DisplayName="Sokolov, Artyom"),
     LarisaSokolov UMETA(DisplayName="Sokolov, Larisa"),
-    NatashaSokolov UMETA(DisplayName="Sokolov, Natasha")
+    NatashaSokolov UMETA(DisplayName="Sokolov, Natasha"),
+
+	AineOVeirne UMETA(DisplayName="O'Verine, Aine"),
+	SavvieOVeirne UMETA(DisplayName="O'Verine, Savvie")
 };

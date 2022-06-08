@@ -19,6 +19,4 @@ class TELLMEYOURSECRET_API ANonPlayerCharacterController : public AAIController
 
 public:
 	virtual void BeginPlay() override;
-
-	ANonPlayerCharacter* GetNonPlayerCharacter() const;
 };
