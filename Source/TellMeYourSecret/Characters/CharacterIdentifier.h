@@ -16,6 +16,7 @@ enum class ECharacterIdentifier : uint8
     VanessaCobb UMETA(DisplayName="Cobb, Vanessa"),
 
     EstellaStandfield UMETA(DisplayName="Stanfied, EStella"),
+    JacobStandfield UMETA(DisplayName="Stanfied, Jacob"),
     Player UMETA(DisplayName="Player"),
     Father,
 
