@@ -5,6 +5,7 @@
 #include "DoorBase.generated.h"
 
 class UInteractComponent;
+class UDoorNavLink;
 
 UCLASS(BlueprintType)
 class TELLMEYOURSECRET_API ADoorBase : public AStatefulInteractiveObject
@@ -19,4 +20,6 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* Door;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UDoorNavLink* DoorNavLink;
 };

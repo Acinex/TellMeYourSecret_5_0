@@ -4,17 +4,20 @@
 
 #include "TellMeYourSecret/Log.h"
 #include "Components/StaticMeshComponent.h"
+#include "TellMeYourSecret/Components/DoorNavLink.h"
 
 ADoorBase::ADoorBase()
 {
 	USceneComponent* Root = CreateDefaultSubobject<USceneComponent>("Root");
-	Door                  = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
+	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
+
+	 DoorNavLink = CreateDefaultSubobject<UDoorNavLink>(TEXT("NavLink"));
 
 	RootComponent = Root;
 	Door->SetupAttachment(Root);
 
 	OffTooltipText = NSLOCTEXT("Interactive", "Door.Off", "Press {0} to close");
-	OnTooltipText  = NSLOCTEXT("Interactive", "Door.On", "Press {0} to open");
+	OnTooltipText = NSLOCTEXT("Interactive", "Door.On", "Press {0} to open");
 }
 
 void ADoorBase::OnConstruction(const FTransform& Transform)

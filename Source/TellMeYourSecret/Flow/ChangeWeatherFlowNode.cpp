@@ -249,8 +249,6 @@ void UChangeWeatherFlowNode::Update(const float TimeRemaining)
 	{
 		TSet<AActor*> Actors = GetFlowSubsystem()->GetFlowActorsByTag(CloudsGamePlayTag, AVolumetricCloud::StaticClass());
 
-		UE_LOG(LogTemp, Warning, TEXT("%i Actors matching the Clouds"), Actors.Num())
-
 		for (const AActor* Actor : Actors)
 		{
 			UVolumetricCloudComponent* Component = Actor->FindComponentByClass<UVolumetricCloudComponent>();
@@ -270,7 +268,6 @@ void UChangeWeatherFlowNode::Update(const float TimeRemaining)
 	if (Data.bChangeTemperature || Data.bChangeIntensity || Data.bChangeLightColor)
 	{
 		TSet<AActor*> Actors = GetFlowSubsystem()->GetFlowActorsByTag(SunGamePlayTag, ADirectionalLight::StaticClass());
-		UE_LOG(LogTemp, Warning, TEXT("%i Actors matching the Sun"), Actors.Num())
 
 		for (const AActor* Actor : Actors)
 		{
@@ -296,7 +293,6 @@ void UChangeWeatherFlowNode::Update(const float TimeRemaining)
 	if (Data.bChangeVolumetricFog || Data.bChangeFogDensity)
 	{
 		TSet<AActor*> Actors = GetFlowSubsystem()->GetFlowActorsByTag(FogGamePlayTag, AExponentialHeightFog::StaticClass());
-		UE_LOG(LogTemp, Warning, TEXT("%i Actors matching the Fog"), Actors.Num())
 
 		for (const AActor* Actor : Actors)
 		{

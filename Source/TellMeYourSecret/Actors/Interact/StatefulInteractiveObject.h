@@ -43,6 +43,7 @@ protected:
 	/** Bound actors will be toggled together with this actor. */
 	UPROPERTY(EditInstanceOnly)
 	TSet<AStatefulInteractiveObject*> BoundActors;
+	
 
 	virtual FText GetTooltipText() const override;
 
@@ -53,6 +54,13 @@ protected:
 	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
 	bool bState;
 
+	UPROPERTY(EditAnywhere)
+	float AutoTurnOff;
+
 private:
+	FTimerHandle Handle;
+	UFUNCTION()
+	void AutoOff();
+	
 	void SetState(TArray<AStatefulInteractiveObject*> Visited);
 };

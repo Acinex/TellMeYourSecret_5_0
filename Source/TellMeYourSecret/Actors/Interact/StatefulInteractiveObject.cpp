@@ -21,6 +21,13 @@ void AStatefulInteractiveObject::Use_Implementation(const FGameplayTagContainer 
 {
 	const TArray<AStatefulInteractiveObject*> Visited;
 	Toggle(Visited, LatentInfo);
+
+	GetWorldTimerManager().ClearTimer(Handle);
+	
+	if(AutoTurnOff)
+	{
+		GetWorldTimerManager().SetTimer(Handle, this, &AStatefulInteractiveObject::AutoOff, AutoTurnOff, false);
+	}
 }
 
 void AStatefulInteractiveObject::AnimateOn_Implementation(const FLatentActionInfo LatentInfo)
@@ -131,6 +138,13 @@ void AStatefulInteractiveObject::Toggle(TArray<AStatefulInteractiveObject*> Visi
 			Actor->Toggle(Visited, LatentInfo);
 		}
 	}
+}
+
+void AStatefulInteractiveObject::AutoOff()
+{
+	const TArray<AStatefulInteractiveObject*> Visited;
+	const FLatentActionInfo LatentInfo;
+	Toggle(Visited, LatentInfo);
 }
 
 void AStatefulInteractiveObject::SetState(TArray<AStatefulInteractiveObject*> Visited)

@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "TimeManager.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTimeChanged, int32, Hour, int32, Minute);
+
 UCLASS()
 class TELLMEYOURSECRET_API UTimeManager : public UGameInstanceSubsystem, public FTickableGameObject
 {
@@ -27,7 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsTime(int32 Hour = -1, int32 Minute = -1, int32 Second = -1) const;
 	UFUNCTION(BlueprintCallable)
-	int GetDayOfYear() const;
+	int32 GetDayOfYear() const;
 
 	UFUNCTION(BlueprintCallable)
 	void FreezeTime(bool bFreeze);
@@ -41,6 +43,9 @@ public:
 	float GetTime() const;
 	UFUNCTION(BlueprintCallable)
 	void SetTime(const float Time);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnTimeChanged OnTimeChanged;
 
 protected:
 	virtual void Tick(float DeltaTime) override;

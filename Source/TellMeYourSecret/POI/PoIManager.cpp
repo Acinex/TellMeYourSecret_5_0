@@ -96,17 +96,23 @@ UObject* UPoIManager::FindPoi(const FGameplayTagContainer Identifier, const AAct
 
 	if (ComponentsPerTag.Num())
 	{
-		if (IsValid(Actor))
+		if (IsValid(Actor) && ComponentsPerTag.Num() > 1)
 		{
 			TArray<AActor*> Actors;
+			TMap<AActor*, UObject*> ActorMap;
 
-			for (const UObject* Component : ComponentsPerTag)
+			for (UObject* Component : ComponentsPerTag)
 			{
-				Actors.Add(Cast<AActor>(Component->GetOuter()));
+				AActor* Outer = Cast<AActor>(Component->GetOuter());
+				ActorMap.Add(Outer, Component);
+				Actors.Add(Outer);
 			}
 
 			float Distance;
-			return UGameplayStatics::FindNearestActor(Actor->GetActorLocation(), Actors, Distance);
+
+			const AActor* NearestActor = UGameplayStatics::FindNearestActor(Actor->GetActorLocation(), Actors, Distance);
+
+			return *ActorMap.Find(NearestActor);
 		}
 
 		return ComponentsPerTag[0];

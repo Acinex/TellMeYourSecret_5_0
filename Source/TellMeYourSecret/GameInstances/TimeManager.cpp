@@ -6,6 +6,7 @@
 void UTimeManager::AddSecond(const float Delta)
 {
 	DateTime += UKismetMathLibrary::FromSeconds(Delta);
+	OnTimeChanged.Broadcast(GetHour(), GetMinute());
 }
 
 FText UTimeManager::GetTimeAsText() const
@@ -27,6 +28,7 @@ FText UTimeManager::GetTimeAsText() const
 void UTimeManager::AddHour(const float Delta)
 {
 	DateTime += UKismetMathLibrary::FromHours(Delta);
+	OnTimeChanged.Broadcast(GetHour(), GetMinute());
 }
 
 int32 UTimeManager::GetHour() const
@@ -48,7 +50,7 @@ bool UTimeManager::IsTime(const int32 Hour, const int32 Minute, const int32 Seco
 	return bIsHour && bIsMinute && bIsSecond;
 }
 
-int UTimeManager::GetDayOfYear() const
+int32 UTimeManager::GetDayOfYear() const
 {
 	return DateTime.GetDayOfYear();
 }
@@ -67,6 +69,7 @@ void UTimeManager::SetTimeOfDay(const int32 Time)
 {
 	DateTime -= DateTime.GetTimeOfDay();
 	DateTime += FTimespan(Time * ETimespan::TicksPerSecond);
+	OnTimeChanged.Broadcast(GetHour(), GetMinute());
 }
 
 float UTimeManager::GetTime() const
@@ -77,11 +80,13 @@ float UTimeManager::GetTime() const
 void UTimeManager::SetTime(const float Time)
 {
 	DateTime = FDateTime::FromUnixTimestamp(Time);
+	OnTimeChanged.Broadcast(GetHour(), GetMinute());
 }
 
 void UTimeManager::Tick(const float DeltaTime)
 {
 	DateTime += FTimespan(DeltaTime * ETimespan::TicksPerSecond * InGameSecondsPerSecond);
+	OnTimeChanged.Broadcast(GetHour(), GetMinute());
 }
 
 TStatId UTimeManager::GetStatId() const
