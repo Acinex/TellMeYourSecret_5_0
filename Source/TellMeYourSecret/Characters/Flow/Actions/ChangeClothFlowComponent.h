@@ -25,5 +25,5 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	TMap<EClothSlot, USkeletalMesh*> Clothes;
+	TMap<EClothSlot, TSoftObjectPtr<USkeletalMesh>> Clothes;
 };

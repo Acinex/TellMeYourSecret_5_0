@@ -35,7 +35,7 @@ void UPlay3DSoundFlowNode::ExecuteInput(const FName& PinName)
 		}
 		else
 		{
-			AudioComponent->SetSound(Sound);
+			AudioComponent->SetSound(Sound.Get());
 			AudioComponent->Play();
 		}
 		TriggerOutput(TEXT("Playing"), false);
@@ -55,7 +55,7 @@ void UPlay3DSoundFlowNode::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 FString UPlay3DSoundFlowNode::GetNodeDescription() const
 {
-	if (!IsValid(Sound))
+	if (!Sound.IsValid())
 	{
 		return TEXT("No Sound selected");
 	}
@@ -70,11 +70,11 @@ FString UPlay3DSoundFlowNode::GetNodeDescription() const
 
 bool UPlay3DSoundFlowNode::IsParametersValid() const
 {
-	return IsValid(Sound) && IdentityTags.IsValid();
+	return Sound.IsValid() && IdentityTags.IsValid();
 }
 
 UObject* UPlay3DSoundFlowNode::GetAssetToEdit()
 {
-	return Sound;
+	return Sound.Get();
 }
 #endif

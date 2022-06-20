@@ -15,20 +15,20 @@ UPlaySoundFlowNode::UPlaySoundFlowNode(const FObjectInitializer& ObjectInitializ
 
 void UPlaySoundFlowNode::ExecuteInput(const FName& PinName)
 {
-	if (!IsValid(Sound))
+	if (!Sound.IsValid())
 	{
 		return Finish();
 	}
 
 	if (!IdentityTags.IsValid())
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), Sound);
+		UGameplayStatics::PlaySound2D(GetWorld(), Sound.Get());
 	}
 	else
 	{
 		for (const TWeakObjectPtr<UFlowComponent>& FoundComponent : GetFlowSubsystem()->GetComponents<UFlowComponent>(IdentityTags, EGameplayContainerMatchType::Any))
 		{
-			UGameplayStatics::PlaySoundAtLocation(FoundComponent.Get(), Sound, FoundComponent.Get()->GetOwner()->GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(FoundComponent.Get(), Sound.Get(), FoundComponent.Get()->GetOwner()->GetActorLocation());
 		}
 	}
 
@@ -38,7 +38,7 @@ void UPlaySoundFlowNode::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 FString UPlaySoundFlowNode::GetNodeDescription() const
 {
-	if (!IsValid(Sound))
+	if (!Sound.IsValid())
 	{
 		return TEXT("No Sound selected");
 	}
@@ -57,7 +57,7 @@ FString UPlaySoundFlowNode::GetNodeDescription() const
 
 bool UPlaySoundFlowNode::IsParametersValid() const
 {
-	return IsValid(Sound);
+	return Sound.IsValid();
 }
 
 #endif

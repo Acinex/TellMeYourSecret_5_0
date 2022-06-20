@@ -28,5 +28,5 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	USoundBase* Sound;
+	TSoftObjectPtr<USoundBase> Sound;
 };

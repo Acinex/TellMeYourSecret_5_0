@@ -31,12 +31,12 @@ protected:
 	float LipSyncDelay;
 
 	UPROPERTY(EditAnywhere, Category=Audio)
-	USoundBase* AudioTrack;
+	TSoftObjectPtr<USoundBase> AudioTrack;
 	UPROPERTY(EditAnywhere, Category=Audio, meta=(DisplayName=Delay))
 	float AudioDelay;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
-	UAnimMontage* Montage;
+	TSoftObjectPtr<UAnimMontage> Montage;
 	UPROPERTY(EditAnywhere, Category=Animation)
 	FName StartSectionName;
 

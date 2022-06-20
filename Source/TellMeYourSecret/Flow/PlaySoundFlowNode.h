@@ -29,5 +29,5 @@ protected:
 	FGameplayTagContainer IdentityTags;
 
 	UPROPERTY(EditAnywhere)
-	USoundBase* Sound;
+	TSoftObjectPtr<USoundBase> Sound;
 };

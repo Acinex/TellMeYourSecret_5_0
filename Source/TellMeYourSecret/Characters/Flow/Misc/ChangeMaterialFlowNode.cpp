@@ -32,7 +32,7 @@ void UChangeMaterialFlowNode::ExecuteInput(const FName& PinName)
 
 		for (int32 MaterialIndex = 0; MaterialIndex < MaterialArray.Materials.Num(); MaterialIndex++)
 		{
-			Component->SetMaterial(MaterialIndex, MaterialArray.Materials[MaterialIndex]);
+			Component->SetMaterial(MaterialIndex, MaterialArray.Materials[MaterialIndex].Get());
 		}
 	}
 

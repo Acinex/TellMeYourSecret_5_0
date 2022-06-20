@@ -25,7 +25,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category=Animation)
-	UAnimMontage* Montage;
+	TSoftObjectPtr<UAnimMontage> Montage;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
 	FName StartSectionName;

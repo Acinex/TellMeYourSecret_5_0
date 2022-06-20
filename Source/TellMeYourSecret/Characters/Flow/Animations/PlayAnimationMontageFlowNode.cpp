@@ -26,7 +26,7 @@ void UPlayAnimationMontageFlowNode::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 UObject* UPlayAnimationMontageFlowNode::GetAssetToEdit()
 {
-	return Montage;
+	return Montage.Get();
 }
 #endif
 

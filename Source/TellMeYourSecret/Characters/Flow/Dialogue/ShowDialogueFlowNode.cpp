@@ -50,7 +50,7 @@ void UShowDialogueFlowNode::ExecuteInput(const FName& PinName)
 	DialogueContainer->SetDialogue(CharacterComponent->CharacterData, Text, Answers);
 
 	LipSyncExecutor = NewObject<ULipSyncExecutor>(this, TEXT("LipSyncExecutor"));
-	LipSyncExecutor->Start(CharacterComponent.Get(), {AudioTrack, AudioDelay, Syllables, LipSyncDelay, Montage, StartSectionName});
+	LipSyncExecutor->Start(CharacterComponent.Get(), {AudioTrack.Get(), AudioDelay, Syllables, LipSyncDelay, Montage.Get(), StartSectionName});
 
 	TWeakObjectPtr<UShowDialogueFlowNode> SelfWeakPtr(this);
 

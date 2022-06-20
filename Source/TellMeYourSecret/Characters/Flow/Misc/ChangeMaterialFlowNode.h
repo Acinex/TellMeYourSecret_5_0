@@ -14,7 +14,7 @@ struct FMaterialArray
 
 	/** Material per MaterialIndex */
 	UPROPERTY(EditAnywhere)
-	TArray<UMaterial*> Materials;
+	TArray<TSoftObjectPtr<UMaterial>> Materials;
 };
 
 /**

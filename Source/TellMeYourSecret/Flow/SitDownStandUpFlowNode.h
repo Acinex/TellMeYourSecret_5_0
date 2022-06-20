@@ -39,15 +39,15 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category=Animation)
-	UAnimMontage* SitDown;
+	TSoftObjectPtr<UAnimMontage> SitDown;
 	UPROPERTY(EditAnywhere, Category=Animation)
 	FName SitDownSection;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
-	UAnimationAsset* Idle;
+	TSoftObjectPtr<UAnimationAsset> Idle;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
-	UAnimMontage* StandUp;
+	TSoftObjectPtr<UAnimMontage> StandUp;
 	UPROPERTY(EditAnywhere, Category=Animation)
 	FName StandUpSection;
 

@@ -16,7 +16,7 @@ UAbstractMontageFlowNode::UAbstractMontageFlowNode(const FObjectInitializer& Obj
 #if WITH_EDITOR
 FString UAbstractMontageFlowNode::GetNodeDescription() const
 {
-	if (!IsValid(Montage))
+	if (!Montage.IsValid())
 	{
 		return TEXT("No Animation Montage selected!");
 	}
@@ -26,14 +26,14 @@ FString UAbstractMontageFlowNode::GetNodeDescription() const
 
 bool UAbstractMontageFlowNode::IsParametersValid() const
 {
-	return IsValid(Montage);
+	return Montage.IsValid();
 }
 #endif
 
 void UAbstractMontageFlowNode::Cleanup()
 {
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage))
+	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
 	{
 		return;
 	}
@@ -51,7 +51,7 @@ void UAbstractMontageFlowNode::OnLoad_Implementation()
 void UAbstractMontageFlowNode::OnSave_Implementation()
 {
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage))
+	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
 	{
 		return;
 	}
@@ -88,7 +88,7 @@ void UAbstractMontageFlowNode::AnimationFinished()
 void UAbstractMontageFlowNode::PlayAnimation()
 {
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage))
+	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
 	{
 		return Finish();
 	}
@@ -98,7 +98,7 @@ void UAbstractMontageFlowNode::PlayAnimation()
 	LatentInfo.CallbackTarget    = this;
 	LatentInfo.UUID              = rand();
 	LatentInfo.Linkage           = 0;
-	NonPlayerComponent->PlayAnimationMontage(Montage, Position == -1.0F ? StartSectionName : NAME_None, Position, LatentInfo);
+	NonPlayerComponent->PlayAnimationMontage(Montage.Get(), Position == -1.0F ? StartSectionName : NAME_None, Position, LatentInfo);
 	UE_LOG(LogTellMeYourSecret, Log, TEXT("Playing %s"), *Montage->GetName())
 
 	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
@@ -121,13 +121,13 @@ void UAbstractMontageFlowNode::PlayAnimation()
 void UAbstractMontageFlowNode::Stop()
 {
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage))
+	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
 	{
 		Finish();
 		return;
 	}
 
-	NonPlayerComponent->StopAnimationMontage(Montage);
+	NonPlayerComponent->StopAnimationMontage(Montage.Get());
 	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
 	if (AnimInstance)
 	{
