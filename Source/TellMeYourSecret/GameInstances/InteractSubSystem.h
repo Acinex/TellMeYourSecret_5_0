@@ -15,6 +15,9 @@
 class AInteractiveObject;
 class ULockComponent;
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInteract, AInteractiveObject*, Object, const FGameplayTagContainer&, Identity);
+
 /**
  * 
  */
@@ -24,10 +27,13 @@ class TELLMEYOURSECRET_API UInteractSubSystem : public UGameInstanceSubsystem, p
 	GENERATED_BODY()
 public:
 	void Register(AInteractiveObject* Object);
-	void Interacted(const FString Name, const bool bIsOn);
+	void Interacted(AInteractiveObject* Object, const FGameplayTagContainer Identity) const;
 
 	UFUNCTION(BlueprintPure)
 	AInteractiveObject* FindObject(const FGameplayTagContainer& Identity, const EGameplayContainerMatchType MatchType) const;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnInteract OnInteract;
 
 private:
 	TMultiMap<FGameplayTag, TWeakObjectPtr<AInteractiveObject>> Registry;

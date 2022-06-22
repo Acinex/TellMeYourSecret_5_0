@@ -46,6 +46,12 @@ bool AInteractiveObject::Interact(const FGameplayTagContainer Identity, FLatentA
 	if (bCanBeUsed && !IsLocked(Identity))
 	{
 		Use(Identity, LatentInfo);
+
+		if (SubSystem)
+		{
+			SubSystem->Interacted(this, Identity);
+		}
+		
 		return true;
 	}
 

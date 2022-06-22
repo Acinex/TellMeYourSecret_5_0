@@ -121,11 +121,6 @@ void AStatefulInteractiveObject::Toggle(TArray<AStatefulInteractiveObject*> Visi
 
 	bState = !bState;
 
-	if (SubSystem)
-	{
-		SubSystem->Interacted(GetName(), bState);
-	}
-
 	if (HasActorBegunPlay())
 	{
 		GetWidget()->SetText(GetText());

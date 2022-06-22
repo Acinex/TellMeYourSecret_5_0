@@ -35,8 +35,9 @@ void UInteractSubSystem::Register(AInteractiveObject* Object)
 	}
 }
 
-void UInteractSubSystem::Interacted(const FString Name, const bool bIsOn)
+void UInteractSubSystem::Interacted(AInteractiveObject* Object, const FGameplayTagContainer Identity) const
 {
+	OnInteract.Broadcast(Object, Identity);
 }
 
 AInteractiveObject* UInteractSubSystem::FindObject(const FGameplayTagContainer& Identity, const EGameplayContainerMatchType MatchType) const
