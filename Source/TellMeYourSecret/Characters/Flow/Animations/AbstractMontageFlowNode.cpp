@@ -21,7 +21,7 @@ FString UAbstractMontageFlowNode::GetNodeDescription() const
 		return TEXT("No Animation Montage selected!");
 	}
 
-	return Montage->GetName().Append("\n").Append(Super::GetNodeDescription());
+	return Montage.LoadSynchronous()->GetName().Append("\n").Append(Super::GetNodeDescription());
 }
 
 bool UAbstractMontageFlowNode::IsParametersValid() const
