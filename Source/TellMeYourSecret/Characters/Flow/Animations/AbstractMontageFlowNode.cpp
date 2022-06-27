@@ -16,7 +16,7 @@ UAbstractMontageFlowNode::UAbstractMontageFlowNode(const FObjectInitializer& Obj
 #if WITH_EDITOR
 FString UAbstractMontageFlowNode::GetNodeDescription() const
 {
-	if (!Montage.IsValid())
+	if (Montage.IsNull())
 	{
 		return TEXT("No Animation Montage selected!");
 	}
@@ -26,7 +26,7 @@ FString UAbstractMontageFlowNode::GetNodeDescription() const
 
 bool UAbstractMontageFlowNode::IsParametersValid() const
 {
-	return Montage.IsValid();
+	return !Montage.IsNull();
 }
 #endif
 
