@@ -19,6 +19,13 @@ void UWaitForTimeFlowNode::ExecuteInput(const FName& PinName)
 {
 	UTimeManager* TimeManager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UTimeManager>();
 
+	if (Hour <= TimeManager->GetHour() && Minute <= TimeManager->GetMinute())
+	{
+		TriggerFirstOutput(false);
+		TriggerOutput(TEXT("Completed"), true);
+		return;
+	}
+
 	TimeManager->OnTimeChanged.AddDynamic(this, &UWaitForTimeFlowNode::TimeChanged);
 	AddStatusReport(FString("It's ") + TimeManager->GetTimeAsText().ToString());
 	TriggerFirstOutput(false);
@@ -39,7 +46,7 @@ void UWaitForTimeFlowNode::TimeChanged(const int32 CurrentHour, const int32 Curr
 	Args.Add(TEXT("Hour"), CurrentHour);
 	Args.Add(TEXT("Minute"), CurrentMinute);
 	AddStatusReport(FString::Format(TEXT("It's {Hour}:{Minute}"), Args));
-	
+
 	if (CurrentHour >= Hour && CurrentMinute >= Minute)
 	{
 		TriggerOutput(TEXT("Completed"), true);
