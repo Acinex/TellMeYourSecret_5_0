@@ -12,14 +12,12 @@ ASelfController::ASelfController()
 void ASelfController::BeginPlay()
 {
 	Super::BeginPlay();
-	InputComponent->BindAction("Menu", IE_Pressed, this, &ASelfController::ShowMenu);
 }
 
-void ASelfController::OnPossess(APawn* InPawn)
+void ASelfController::SetupInputComponent()
 {
-	Super::OnPossess(InPawn);
-
-	UE_LOG(LogTellMeYourSecret, Log, TEXT("Pawn is: %s"), *InPawn->GetClass()->GetName())
+	Super::SetupInputComponent();
+	InputComponent->BindAction("Menu", IE_Pressed, this, &ASelfController::ShowMenu);
 }
 
 void ASelfController::ShowMenu()

@@ -17,7 +17,7 @@ UWaitForTimeFlowNode::UWaitForTimeFlowNode(const FObjectInitializer& ObjectIniti
 
 void UWaitForTimeFlowNode::ExecuteInput(const FName& PinName)
 {
-	UTimeManager* TimeManager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UTimeManager>();
+	TimeManager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UTimeManager>();
 
 	if (Hour <= TimeManager->GetHour() && Minute <= TimeManager->GetMinute())
 	{
@@ -27,25 +27,31 @@ void UWaitForTimeFlowNode::ExecuteInput(const FName& PinName)
 	}
 
 	TimeManager->OnTimeChanged.AddDynamic(this, &UWaitForTimeFlowNode::TimeChanged);
-	AddStatusReport(FString("It's ") + TimeManager->GetTimeAsText().ToString());
 	TriggerFirstOutput(false);
 }
 
+#if WITH_EDITOR
+FString UWaitForTimeFlowNode::GetStatusString() const
+{
+	if (IsValid(TimeManager))
+	{
+		return TimeManager->GetTimeAsText().ToString();
+	}
+
+	return "";
+}
+#endif
+
 void UWaitForTimeFlowNode::Cleanup()
 {
-	UTimeManager* TimeManager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UTimeManager>();
-
 	TimeManager->OnTimeChanged.RemoveDynamic(this, &UWaitForTimeFlowNode::TimeChanged);
 }
 
 void UWaitForTimeFlowNode::TimeChanged(const int32 CurrentHour, const int32 CurrentMinute)
 {
-	ClearStatusReport();
-
 	FStringFormatNamedArguments Args;
 	Args.Add(TEXT("Hour"), CurrentHour);
 	Args.Add(TEXT("Minute"), CurrentMinute);
-	AddStatusReport(FString::Format(TEXT("It's {Hour}:{Minute}"), Args));
 
 	if (CurrentHour >= Hour && CurrentMinute >= Minute)
 	{

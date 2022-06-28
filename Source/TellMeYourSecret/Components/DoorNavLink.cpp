@@ -83,10 +83,13 @@ void UDoorNavLink::NotifySmartLinkReached(UNavLinkCustomComponent* LinkComp, UOb
 	if (const UPathFollowingComponent* PathComp = Cast<UPathFollowingComponent>(PathingAgent))
 	{
 		AActor* PathOwner = PathComp->GetOwner();
+
 		if (const AController* ControllerOwner = Cast<AController>(PathOwner))
 		{
 			PathOwner = ControllerOwner->GetPawn();
 		}
+
+		UE_LOG(LogTellMeYourSecret, Log, TEXT("%s reached SmartLink"), *PathOwner->GetActorLabel())
 		OpenDoor(PathOwner, DestPoint);
 	}
 }
@@ -96,7 +99,7 @@ void UDoorNavLink::OpenDoor(AActor* Agent, const FVector& Destination)
 	if (!Door || Door->GetState())
 	{
 		if (Door)
-			UE_LOG(LogTellMeYourSecret, Log, TEXT("Door %s was already open"), *Door->GetName())
+			UE_LOG(LogTellMeYourSecret, Log, TEXT("Door %s was already open"), *Door->GetActorLabel())
 		else
 			UE_LOG(LogTellMeYourSecret, Log, TEXT("This is not the Door you are looking for"))
 		return;
@@ -115,12 +118,17 @@ void UDoorNavLink::OpenDoor(AActor* Agent, const FVector& Destination)
 	LatentInfo.CallbackTarget = LatentAction;
 	LatentInfo.ExecutionFunction = TEXT("ContinueMove");
 	LatentInfo.Linkage = 0;
+
 	if (Door->Interact(CharacterComponent->IdentityTags, LatentInfo))
 	{
 		if (UCharacterMovementComponent* CharacterMovementComponent = Agent->FindComponentByClass<UCharacterMovementComponent>())
 		{
 			CharacterMovementComponent->SetMovementMode(MOVE_None, 0);
 		}
+	}
+	else
+	{
+		UE_LOG(LogTellMeYourSecret, Log, TEXT("The Door could not been used"))
 	}
 }
 

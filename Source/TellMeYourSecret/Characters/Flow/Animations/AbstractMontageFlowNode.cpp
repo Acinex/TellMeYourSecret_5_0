@@ -21,7 +21,7 @@ FString UAbstractMontageFlowNode::GetNodeDescription() const
 		return TEXT("No Animation Montage selected!");
 	}
 
-	return Montage.LoadSynchronous()->GetName().Append("\n").Append(Super::GetNodeDescription());
+	return Montage.GetAssetName().Append("\n").Append(Super::GetNodeDescription());
 }
 
 bool UAbstractMontageFlowNode::IsParametersValid() const
@@ -56,8 +56,7 @@ void UAbstractMontageFlowNode::OnSave_Implementation()
 		return;
 	}
 
-	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
-	if (AnimInstance)
+	if (const UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>())
 	{
 		Position = AnimInstance->GetActiveMontageInstance()->GetPosition();
 	}
@@ -76,8 +75,7 @@ void UAbstractMontageFlowNode::AnimationFinished()
 		return;
 	}
 
-	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
-	if (AnimInstance)
+	if (UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>())
 	{
 		AnimInstance->OnPlayMontageNotifyBegin.RemoveAll(this);
 	}
@@ -86,27 +84,26 @@ void UAbstractMontageFlowNode::AnimationFinished()
 }
 
 void UAbstractMontageFlowNode::PlayAnimation()
-{
+{	
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
+	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage.LoadSynchronous()))
 	{
+		AddStatusReport(TEXT("No Actor or Montage"));
 		return Finish();
 	}
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.ExecutionFunction = TEXT("AnimationFinished");
-	LatentInfo.CallbackTarget    = this;
-	LatentInfo.UUID              = rand();
-	LatentInfo.Linkage           = 0;
+	LatentInfo.CallbackTarget = this;
+	LatentInfo.UUID = rand();
+	LatentInfo.Linkage = 0;
+
 	NonPlayerComponent->PlayAnimationMontage(Montage.Get(), Position == -1.0F ? StartSectionName : NAME_None, Position, LatentInfo);
 	UE_LOG(LogTellMeYourSecret, Log, TEXT("Playing %s"), *Montage->GetName())
 
-	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
-	if (AnimInstance)
+	if (UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>())
 	{
-		FAnimMontageInstance* Instance = AnimInstance->MontageInstances[AnimInstance->MontageInstances.Num() - 1];
-
-		if (Instance)
+		if (const FAnimMontageInstance* Instance = AnimInstance->MontageInstances[AnimInstance->MontageInstances.Num() - 1])
 		{
 			MontageInstanceID = Instance->GetInstanceID();
 			AnimInstance->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &UAbstractMontageFlowNode::OnPlayMontageNotifyBegin);
@@ -121,15 +118,14 @@ void UAbstractMontageFlowNode::PlayAnimation()
 void UAbstractMontageFlowNode::Stop()
 {
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();
-	if (!IsValid(NonPlayerComponent.Get()) || !Montage.IsValid())
+	if (!IsValid(NonPlayerComponent.Get()) || !IsValid(Montage.LoadSynchronous()))
 	{
 		Finish();
 		return;
 	}
 
 	NonPlayerComponent->StopAnimationMontage(Montage.Get());
-	UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>();
-	if (AnimInstance)
+	if (UAnimInstance* AnimInstance = NonPlayerComponent->GetAnimInstance<UAnimInstance>())
 	{
 		AnimInstance->OnPlayMontageNotifyBegin.RemoveAll(this);
 	}

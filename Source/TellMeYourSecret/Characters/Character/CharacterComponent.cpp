@@ -8,6 +8,7 @@
 #include "TellMeYourSecret/Characters/UI/DialogueContainer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TellMeYourSecret/Log.h"
 #include "TellMeYourSecret/Characters/ReputationSystem.h"
 
 // Sets default values for this component's properties
