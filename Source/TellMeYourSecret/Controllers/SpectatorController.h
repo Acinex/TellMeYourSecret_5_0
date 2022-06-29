@@ -17,11 +17,6 @@ public:
 	ASpectatorController();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION()
-	void Rotate(float X);
-	UFUNCTION()
-	void MoveUp(float X);
 	virtual void SetupInputComponent() override;
 
 	UFUNCTION(Exec)
@@ -37,4 +32,15 @@ protected:
 private:
 	UPROPERTY()
 	AActor* Spectated;
+
+	UFUNCTION()
+	void Rotate(float X);
+	UFUNCTION()
+	void MoveUp(float X);
+	UFUNCTION()
+	void Faster();
+	UFUNCTION()
+	void Slower();
+	UFUNCTION()
+	void DefaultSpeed();
 };

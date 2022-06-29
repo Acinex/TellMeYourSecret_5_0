@@ -11,7 +11,7 @@ ADoorBase::ADoorBase()
 	USceneComponent* Root = CreateDefaultSubobject<USceneComponent>("Root");
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 
-	 DoorNavLink = CreateDefaultSubobject<UDoorNavLink>(TEXT("NavLink"));
+	DoorNavLink = CreateDefaultSubobject<UDoorNavLink>(TEXT("NavLink"));
 
 	RootComponent = Root;
 	Door->SetupAttachment(Root);

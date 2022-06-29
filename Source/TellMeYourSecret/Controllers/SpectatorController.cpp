@@ -53,6 +53,7 @@ void ASpectatorController::Tick(float DeltaTime)
 void ASpectatorController::Rotate(float X)
 {
 	Rotation.Yaw -= X * 5;
+	
 	if (X != 0 && IsValid(Spectated))
 	{
 		FRotator FindLookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetPawn()->GetActorLocation(), Spectated->GetActorLocation());
@@ -65,9 +66,23 @@ void ASpectatorController::Rotate(float X)
 
 void ASpectatorController::MoveUp(float X)
 {
-	Z = FMath::Clamp(Z + X, 30, 180);
+	Z = FMath::Clamp(Z + X, -70, 70);
 }
 
+void ASpectatorController::Faster()
+{
+	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) + 0.1);
+}
+
+void ASpectatorController::Slower()
+{
+	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) - 0.1);
+}
+
+void ASpectatorController::DefaultSpeed()
+{
+	UGameplayStatics::SetGlobalTimeDilation(this, 1);
+}
 
 void ASpectatorController::SetupInputComponent()
 {
@@ -78,4 +93,8 @@ void ASpectatorController::SetupInputComponent()
 
 	InputComponent->BindAxis("MoveForward", this, &ASpectatorController::MoveUp);
 	InputComponent->BindAxis("MoveRight", this, &ASpectatorController::Rotate);
+
+	InputComponent->BindKey(EKeys::Add, IE_Pressed, this, &ASpectatorController::Faster);
+	InputComponent->BindKey(EKeys::Subtract, IE_Pressed, this, &ASpectatorController::Slower);
+	InputComponent->BindKey(EKeys::NumPadZero, IE_Pressed, this, &ASpectatorController::DefaultSpeed);
 }
