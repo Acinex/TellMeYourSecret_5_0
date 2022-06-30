@@ -27,7 +27,7 @@ void UChangeClothFlowComponent::ExecuteInput(const FName& PinName)
 		{
 			if (ClothComponent->GetClothSlot() == Tuple.Key)
 			{
-				ClothComponent->SetSkeletalMesh(Tuple.Value.Get());
+				ClothComponent->SetSkeletalMesh(Tuple.Value.LoadSynchronous());
 			}
 		}
 	}
@@ -43,7 +43,7 @@ FString UChangeClothFlowComponent::GetNodeDescription() const
 
 	for (const TTuple<EClothSlot, TSoftObjectPtr<USkeletalMesh>> Tuple : Clothes)
 	{
-		ClothString.Append(LINE_TERMINATOR).Append(Enum->GetNameByValue(static_cast<int64>(Tuple.Key)).ToString()).Append(": ").Append(Tuple.Value.IsValid() ? Tuple.Value->GetName() : "none");
+		ClothString.Append(LINE_TERMINATOR).Append(Enum->GetNameByValue(static_cast<int64>(Tuple.Key)).ToString()).Append(": ").Append(Tuple.Value.IsNull() ?  "none":Tuple.Value->GetName());
 	}
 
 	return Super::GetNodeDescription() + ClothString;

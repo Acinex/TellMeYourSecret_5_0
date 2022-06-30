@@ -71,12 +71,12 @@ void ASpectatorController::MoveUp(float X)
 
 void ASpectatorController::Faster()
 {
-	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) + 0.1);
+	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) + 0.5);
 }
 
 void ASpectatorController::Slower()
 {
-	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) - 0.1);
+	UGameplayStatics::SetGlobalTimeDilation(this, UGameplayStatics::GetGlobalTimeDilation(this) - 0.5);
 }
 
 void ASpectatorController::DefaultSpeed()
