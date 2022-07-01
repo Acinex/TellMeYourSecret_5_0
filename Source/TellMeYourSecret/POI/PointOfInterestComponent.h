@@ -17,6 +17,11 @@ public:
 	// Sets default values for this component's properties
 	UPointOfInterestComponent();
 
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+	void UpdateActorLabel();
+
 	virtual FVector FindRandomSpot_Implementation() override;
 
 	virtual const FGameplayTagContainer GetIdentifier_Implementation() const override;
