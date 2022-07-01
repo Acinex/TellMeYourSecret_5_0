@@ -51,6 +51,11 @@ void USitDownStandUpFlowNode::FixNode(UEdGraphNode* NewGraph)
 }
 
 #if WITH_EDITOR
+FString USitDownStandUpFlowNode::GetNodeDescription() const
+{
+	return Super::GetNodeDescription().Append(GetIdentityTagsDescription(ChairTags));
+}
+
 FString USitDownStandUpFlowNode::GetStatusString() const
 {
 	FString Result = Super::GetStatusString();

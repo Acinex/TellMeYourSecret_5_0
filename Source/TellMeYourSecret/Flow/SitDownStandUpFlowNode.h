@@ -34,6 +34,7 @@ public:
 	virtual void FixNode(UEdGraphNode* NewGraph) override;
 
 #if WITH_EDITOR
+	virtual FString GetNodeDescription() const override;
 	virtual FString GetStatusString() const override;
 #endif
 
