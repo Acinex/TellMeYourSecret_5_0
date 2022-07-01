@@ -38,12 +38,13 @@ void UChangeClothFlowComponent::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 FString UChangeClothFlowComponent::GetNodeDescription() const
 {
-	UEnum*  Enum = StaticEnum<EClothSlot>();
+	const UEnum* Enum = StaticEnum<EClothSlot>();
 	FString ClothString;
 
 	for (const TTuple<EClothSlot, TSoftObjectPtr<USkeletalMesh>> Tuple : Clothes)
 	{
-		ClothString.Append(LINE_TERMINATOR).Append(Enum->GetNameByValue(static_cast<int64>(Tuple.Key)).ToString()).Append(": ").Append(Tuple.Value.IsNull() ?  "none":Tuple.Value->GetName());
+		ClothString.Append(LINE_TERMINATOR).Append(Enum->GetNameByValue(static_cast<int64>(Tuple.Key)).ToString())
+		           .Append(": ").Append(Tuple.Value.IsNull() ? "none" : Tuple.Value.GetAssetName());
 	}
 
 	return Super::GetNodeDescription() + ClothString;
