@@ -6,14 +6,14 @@
 
 #include "TellMeYourSecret/Flow/ActorFlowNode.h"
 
-#include "AttachDetachActorFlowNode.generated.h"
+#include "AttachActorFlowNode.generated.h"
 
-UCLASS(NotBlueprintable, meta=(DisplayName="Attach / Detach Actor"))
-class TELLMEYOURSECRET_API UAttachDetachActorFlowNode : public UActorFlowNode
+UCLASS(NotBlueprintable, meta=(DisplayName="Attach Actor"))
+class TELLMEYOURSECRET_API UAttachActorFlowNode : public UActorFlowNode
 {
 	GENERATED_BODY()
 public:
-	explicit UAttachDetachActorFlowNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	explicit UAttachActorFlowNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void ExecuteInput(const FName& PinName) override;
 
@@ -42,8 +42,6 @@ protected:
 private:
 	UPROPERTY(SaveGame)
 	TWeakObjectPtr<AActor> AttachedItem;
-	UPROPERTY(SaveGame)
-	bool bSimulatePhysics;
 
 	void Attach();
 };

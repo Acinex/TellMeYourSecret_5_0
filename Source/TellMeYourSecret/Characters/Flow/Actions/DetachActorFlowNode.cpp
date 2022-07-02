@@ -1,0 +1,45 @@
+﻿// Copyright Acinex Games 2020
+
+
+#include "DetachActorFlowNode.h"
+
+#include "FlowSubsystem.h"
+
+UDetachActorFlowNode::UDetachActorFlowNode(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
+{
+#if WITH_EDITOR
+	Category = TEXT("Action");
+#endif
+}
+
+void UDetachActorFlowNode::ExecuteInput(const FName& PinName)
+{
+	TSet<TWeakObjectPtr<UFlowComponent>> FlowComponents = GetFlowSubsystem()->GetComponents<UFlowComponent>(ItemIdentityTags, EGameplayContainerMatchType::All);
+
+	if (FlowComponents.Num() != 1)
+	{
+		AddStatusReport(TEXT("The Identifier is not unique or does not exist"));
+	}
+
+	AActor* Actor = FlowComponents[FSetElementId::FromInteger(0)]->GetOwner();
+
+	if (!IsValid(Actor))
+	{
+		return TriggerFirstOutput(true);
+	}
+
+	Actor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	if (UStaticMeshComponent* StaticMeshComponent = Actor->FindComponentByClass<UStaticMeshComponent>())
+	{
+		StaticMeshComponent->SetSimulatePhysics(bSimulatePhysics);
+	}
+
+	return TriggerFirstOutput(true);
+}
+
+#if WITH_EDITOR
+FString UDetachActorFlowNode::GetNodeDescription() const
+{
+	return Super::GetNodeDescription() + LINE_TERMINATOR + GetIdentityTagsDescription(ItemIdentityTags);
+}
+#endif
