@@ -25,6 +25,7 @@ public:
 	void SetOccupied(const bool InbOccupied);
 
 protected:
+	/** Character contained in this Tag can use this. Keep empty if its for everyone */
 	UPROPERTY(EditAnywhere)
 	FGameplayTagContainer Tags;
 
