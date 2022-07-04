@@ -3,6 +3,7 @@
 #include "MorphTargetFlowNode.h"
 
 #include "FlowAsset.h"
+#include "TellMeYourSecret/TellMeYourSecretGameSettings.h"
 #include "TellMeYourSecret/Characters/NonPlayerComponent.h"
 #include "TellMeYourSecret/Characters/Util/MorphTargetExecutor.h"
 
@@ -33,7 +34,7 @@ void UMorphTargetFlowNode::ExecuteInput(const FName& PinName)
 	Executor->OnStepFinished.AddDynamic(this, &UMorphTargetFlowNode::FinishStep);
 	Counter = MorphTargets.Num();
 
-	for (auto MorphTargetChange : MorphTargets)
+	for (const auto MorphTargetChange : MorphTargets)
 	{
 		Executor->AddMorphTargetChange(NonPlayerComponent.Get(), MorphTargetChange);
 	}
@@ -46,10 +47,64 @@ void UMorphTargetFlowNode::ExecuteInput(const FName& PinName)
 	}
 }
 
+void UMorphTargetFlowNode::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UMorphTargetFlowNode, Title))
+	{
+		static UTellMeYourSecretGameSettings* TellMeYourSecretGameSettings = UTellMeYourSecretGameSettings::Get();
+		if (TellMeYourSecretGameSettings->MorphTargetTemplates.IsNull())
+		{
+			return;
+		}
+
+		const UDataTable* DataTable = TellMeYourSecretGameSettings->MorphTargetTemplates.LoadSynchronous();
+		static const FString ContextString = "UMorphTargetFlowNode";
+
+		if (const FLetterMorphTarget* Row = DataTable->FindRow<FLetterMorphTarget>(FName(Title), ContextString))
+		{
+			MorphTargets = TSet(Row->MorphTargetChanges);
+			bUsedTemplate = true;
+		}
+
+		return;
+	}
+
+	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UMorphTargetFlowNode, MorphTargets))
+	{
+		static UTellMeYourSecretGameSettings* TellMeYourSecretGameSettings = UTellMeYourSecretGameSettings::Get();
+		if (TellMeYourSecretGameSettings->MorphTargetTemplates.IsNull())
+		{
+			bUsedTemplate = false;
+			return;
+		}
+		const UDataTable* DataTable = TellMeYourSecretGameSettings->MorphTargetTemplates.LoadSynchronous();
+		static const FString ContextString = "UMorphTargetFlowNode";
+
+		if (const FLetterMorphTarget* Row = DataTable->FindRow<FLetterMorphTarget>(FName(Title), ContextString))
+		{
+			bool bSame = true;
+			int Index = 0;
+			for (FMorphTargetChange MorphTarget : MorphTargets)
+			{
+				if (MorphTarget != Row->MorphTargetChanges[Index])
+				{
+					bSame = false;
+					break;
+				}
+				Index++;
+			}
+
+			bUsedTemplate = bSame;
+		}
+	}
+}
+
 #if WITH_EDITOR
 FString UMorphTargetFlowNode::GetNodeDescription() const
 {
-	return Super::GetNodeDescription() + LINE_TERMINATOR + Title;
+	return Super::GetNodeDescription() + LINE_TERMINATOR + Title + LINE_TERMINATOR + (bUsedTemplate ? TEXT("Uses Template") : TEXT("Is Customized"));
 }
 
 bool UMorphTargetFlowNode::IsParametersValid() const

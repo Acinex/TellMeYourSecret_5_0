@@ -23,6 +23,8 @@ public:
 	virtual void ExecuteInput(const FName& PinName) override;
 
 #if WITH_EDITOR
+virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	
 	virtual FString GetNodeDescription() const override;
 	virtual bool IsParametersValid() const override;
 	virtual FString GetStatusString() const override;
@@ -49,4 +51,7 @@ private:
 	int8 Counter;
 	UPROPERTY()
 	UMorphTargetExecutor* Executor;
+
+	UPROPERTY()
+	bool bUsedTemplate;
 };

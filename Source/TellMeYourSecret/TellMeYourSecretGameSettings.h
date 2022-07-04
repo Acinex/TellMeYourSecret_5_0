@@ -21,7 +21,7 @@ public:
 
 	static UTellMeYourSecretGameSettings* Get() { return CastChecked<UTellMeYourSecretGameSettings>(StaticClass()->GetDefaultObject()); }
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Config, EditAnywhere)
 	TSoftObjectPtr<UDataTable> MorphTargetTemplates;
 
 };
