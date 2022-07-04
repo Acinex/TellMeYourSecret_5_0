@@ -23,8 +23,8 @@ public:
 	virtual void ExecuteInput(const FName& PinName) override;
 
 #if WITH_EDITOR
-virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
 	virtual FString GetNodeDescription() const override;
 	virtual bool IsParametersValid() const override;
 	virtual FString GetStatusString() const override;
@@ -37,6 +37,10 @@ protected:
 	/** Clear all morph targets before applying the new ones */
 	UPROPERTY(EditAnywhere)
 	bool bClearMorphTargets;
+
+	/* Changing this can reset the state if the MorphTargets are not changed and thus will be overwritten on next change of the title */
+	UPROPERTY(EditAnywhere)
+	bool bUsedTemplate = true;
 
 	UFUNCTION()
 	virtual void FinishStep();
@@ -51,7 +55,4 @@ private:
 	int8 Counter;
 	UPROPERTY()
 	UMorphTargetExecutor* Executor;
-
-	UPROPERTY()
-	bool bUsedTemplate;
 };
