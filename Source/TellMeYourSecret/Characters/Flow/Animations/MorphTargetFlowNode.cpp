@@ -51,7 +51,7 @@ void UMorphTargetFlowNode::PostEditChangeProperty(FPropertyChangedEvent& Propert
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UMorphTargetFlowNode, Title))
+	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UMorphTargetFlowNode, Title) && bUsedTemplate)
 	{
 		static UTellMeYourSecretGameSettings* TellMeYourSecretGameSettings = UTellMeYourSecretGameSettings::Get();
 		if (TellMeYourSecretGameSettings->MorphTargetTemplates.IsNull())
@@ -71,7 +71,11 @@ void UMorphTargetFlowNode::PostEditChangeProperty(FPropertyChangedEvent& Propert
 		return;
 	}
 
-	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UMorphTargetFlowNode, MorphTargets))
+	UE_LOG(LogTemp, Log, TEXT("Property was changed: %s"), *PropertyChangedEvent.GetPropertyName().ToString())
+
+	static TArray<FName> Properties = {FName("Name"), FName("Value"), FName("Time"), FName("Steps"), FName("MorphTargets")};
+
+	if (Properties.Contains(PropertyChangedEvent.GetPropertyName()))
 	{
 		static UTellMeYourSecretGameSettings* TellMeYourSecretGameSettings = UTellMeYourSecretGameSettings::Get();
 		if (TellMeYourSecretGameSettings->MorphTargetTemplates.IsNull())
@@ -79,11 +83,18 @@ void UMorphTargetFlowNode::PostEditChangeProperty(FPropertyChangedEvent& Propert
 			bUsedTemplate = false;
 			return;
 		}
+
 		const UDataTable* DataTable = TellMeYourSecretGameSettings->MorphTargetTemplates.LoadSynchronous();
 		static const FString ContextString = "UMorphTargetFlowNode";
 
 		if (const FLetterMorphTarget* Row = DataTable->FindRow<FLetterMorphTarget>(FName(Title), ContextString))
 		{
+			if (MorphTargets.Num() != Row->MorphTargetChanges.Num())
+			{
+				bUsedTemplate = false;
+				return;
+			}
+
 			bool bSame = true;
 			int Index = 0;
 			for (FMorphTargetChange MorphTarget : MorphTargets)
