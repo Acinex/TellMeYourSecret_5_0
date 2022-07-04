@@ -19,7 +19,7 @@ UPlay3DSoundFlowNode::UPlay3DSoundFlowNode(const FObjectInitializer& ObjectIniti
 
 void UPlay3DSoundFlowNode::ExecuteInput(const FName& PinName)
 {
-	AActor* Actor = FindActor();
+	const AActor* Actor = FindActor();
 	if (!Actor)
 	{
 		return Finish();
@@ -55,7 +55,7 @@ void UPlay3DSoundFlowNode::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 FString UPlay3DSoundFlowNode::GetNodeDescription() const
 {
-	if (!Sound.IsValid())
+	if (Sound.IsNull())
 	{
 		return TEXT("No Sound selected");
 	}
@@ -65,16 +65,16 @@ FString UPlay3DSoundFlowNode::GetNodeDescription() const
 		return TEXT("No Audio Component selected");
 	}
 
-	return Super::GetNodeDescription() + LINE_TERMINATOR + TEXT("Playing Sound ") + Sound->GetName() + TEXT(" At ") + GetIdentityTagsDescription(IdentityTags);
+	return Super::GetNodeDescription() + LINE_TERMINATOR + TEXT("Playing Sound ") + Sound.GetAssetName() + TEXT(" At ") + GetIdentityTagsDescription(IdentityTags);
 }
 
 bool UPlay3DSoundFlowNode::IsParametersValid() const
 {
-	return Sound.IsValid() && IdentityTags.IsValid();
+	return !Sound.IsNull() && IdentityTags.IsValid();
 }
 
 UObject* UPlay3DSoundFlowNode::GetAssetToEdit()
 {
-	return Sound.Get();
+	return Sound.LoadSynchronous();
 }
 #endif
