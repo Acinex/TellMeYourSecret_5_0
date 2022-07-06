@@ -45,7 +45,7 @@ protected:
 	FName SitDownSection;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
-	TSoftObjectPtr<UAnimationAsset> Idle;
+	TSoftObjectPtr<UAnimSequenceBase> Idle;
 
 	UPROPERTY(EditAnywhere, Category=Animation)
 	TSoftObjectPtr<UAnimMontage> StandUp;
@@ -56,6 +56,8 @@ protected:
 	FGameplayTagContainer ChairTags;
 
 	virtual void OnLoad_Implementation() override;
+
+	virtual void PreloadContent() override;
 
 private:
 	UPROPERTY(SaveGame)

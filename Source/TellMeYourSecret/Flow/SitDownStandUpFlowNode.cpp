@@ -110,6 +110,25 @@ void USitDownStandUpFlowNode::OnLoad_Implementation()
 	}
 }
 
+void USitDownStandUpFlowNode::PreloadContent()
+{
+	if(!SitDown.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		SitDown.LoadSynchronous();
+	}
+	if(!StandUp.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		StandUp.LoadSynchronous();
+	}
+	if(!Idle.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		Idle.LoadSynchronous();
+	}
+}
+
 bool USitDownStandUpFlowNode::Approach()
 {
 	State = ESitDownStandUpFlowExecutionState::Moving;
