@@ -19,9 +19,12 @@ void UDetachActorFlowNode::ExecuteInput(const FName& PinName)
 	if (FlowComponents.Num() != 1)
 	{
 		AddStatusReport(TEXT("The Identifier is not unique or does not exist"));
+		return TriggerFirstOutput(true);
 	}
 
-	AActor* Actor = FlowComponents[FSetElementId::FromInteger(0)]->GetOwner();
+	const TWeakObjectPtr<UFlowComponent> FlowComponent = FlowComponents[FSetElementId::FromInteger(0)];
+
+	AActor* Actor = FlowComponent.IsValid() ? FlowComponent->GetOwner() : nullptr;
 
 	if (!IsValid(Actor))
 	{
