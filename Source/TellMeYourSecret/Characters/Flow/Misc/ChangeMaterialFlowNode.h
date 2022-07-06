@@ -34,4 +34,6 @@ protected:
 	/** Material-Array per Component in that specific order */
 	UPROPERTY(EditAnywhere)
 	TArray<FMaterialArray> Materials;
+
+	virtual void PreloadContent() override;
 };

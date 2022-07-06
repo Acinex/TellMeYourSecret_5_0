@@ -133,3 +133,17 @@ void UShowDialogueFlowNode::Stop() const
 {
 	LipSyncExecutor->Stop();
 }
+
+void UShowDialogueFlowNode::PreloadContent()
+{
+	if (!Montage.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		Montage.LoadSynchronous();
+	}
+	if (!AudioTrack.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		AudioTrack.LoadSynchronous();
+	}
+}

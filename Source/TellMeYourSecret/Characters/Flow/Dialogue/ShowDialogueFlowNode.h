@@ -67,6 +67,8 @@ private:
 protected:
 	virtual void Stop() const;
 
+	virtual void PreloadContent() override;
+
 private:
 	TWeakObjectPtr<UCharacterComponent> CharacterComponent;
 	TWeakObjectPtr<UCharacterComponent> PartnerCharacterComponent;

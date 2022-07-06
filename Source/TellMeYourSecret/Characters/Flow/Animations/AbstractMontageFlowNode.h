@@ -39,6 +39,8 @@ protected:
 	{
 	}
 
+	virtual void PreloadContent() override;
+
 	void PlayAnimation();
 	void Stop();
 

@@ -50,3 +50,15 @@ FString UChangeClothFlowComponent::GetNodeDescription() const
 	return Super::GetNodeDescription() + ClothString;
 }
 #endif
+
+void UChangeClothFlowComponent::PreloadContent()
+{
+	for (TTuple<EClothSlot, TSoftObjectPtr<USkeletalMesh>> Tuple : Clothes)
+	{
+		if(!Tuple.Value.IsNull())
+		{
+			// ReSharper disable once CppExpressionWithoutSideEffects
+			Tuple.Value.LoadSynchronous();
+		}
+	}
+}

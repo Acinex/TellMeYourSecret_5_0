@@ -83,6 +83,15 @@ void UAbstractMontageFlowNode::AnimationFinished()
 	OnComplete();
 }
 
+void UAbstractMontageFlowNode::PreloadContent()
+{
+	if(!Montage.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		Montage.LoadSynchronous();
+	}
+}
+
 void UAbstractMontageFlowNode::PlayAnimation()
 {	
 	const TWeakObjectPtr<UNonPlayerComponent> NonPlayerComponent = FindNonPlayer();

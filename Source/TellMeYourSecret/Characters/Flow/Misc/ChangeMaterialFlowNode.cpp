@@ -27,8 +27,8 @@ void UChangeMaterialFlowNode::ExecuteInput(const FName& PinName)
 			return AddStatusReport(FString::Printf(TEXT("This Actor (%s) has (%i) Meshes but only (%i) are defined"), *Actor->GetName(), Components.Num(), Materials.Num()));
 		}
 
-		UMeshComponent* Component     = Components[Index];
-		FMaterialArray  MaterialArray = Materials[Index];
+		UMeshComponent* Component = Components[Index];
+		FMaterialArray MaterialArray = Materials[Index];
 
 		for (int32 MaterialIndex = 0; MaterialIndex < MaterialArray.Materials.Num(); MaterialIndex++)
 		{
@@ -37,4 +37,19 @@ void UChangeMaterialFlowNode::ExecuteInput(const FName& PinName)
 	}
 
 	TriggerFirstOutput(true);
+}
+
+void UChangeMaterialFlowNode::PreloadContent()
+{
+	for (FMaterialArray MaterialArray : Materials)
+	{
+		for (TSoftObjectPtr<UMaterial> Material : MaterialArray.Materials)
+		{
+			if (!Material.IsNull())
+			{
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Material.LoadSynchronous();
+			}
+		}
+	}
 }

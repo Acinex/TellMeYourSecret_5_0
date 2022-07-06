@@ -26,4 +26,6 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<EClothSlot, TSoftObjectPtr<USkeletalMesh>> Clothes;
+
+	virtual void PreloadContent() override;
 };
