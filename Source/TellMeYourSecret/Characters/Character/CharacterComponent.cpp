@@ -8,13 +8,15 @@
 #include "TellMeYourSecret/Characters/UI/DialogueContainer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "TellMeYourSecret/Log.h"
+#include "TellMeYourSecret/TellMeYourSecretGameSettings.h"
 #include "TellMeYourSecret/Characters/ReputationSystem.h"
+#include "TellMeYourSecret/GameInstances/TellMeYourSecretGameInstance.h"
 
 // Sets default values for this component's properties
 UCharacterComponent::UCharacterComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
 void UCharacterComponent::PlayAnimationMontage(UAnimMontage* Montage, const FName StartSectionName, const float TimeToStartMontageAt, const FLatentActionInfo LatentInfo) const
@@ -35,15 +37,14 @@ void UCharacterComponent::StopAnimationMontage(UAnimMontage* Montage) const
 
 void UCharacterComponent::PauseAnimationMontage() const
 {
-	ACharacter* Character = Cast<ACharacter>(GetOwner());
-	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	const UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 	if (!AnimInstance)
 	{
 		return;
 	}
 
-	FAnimMontageInstance* ActiveMontageInstance = AnimInstance->GetActiveMontageInstance();
-	if (ActiveMontageInstance)
+	if (FAnimMontageInstance* ActiveMontageInstance = AnimInstance->GetActiveMontageInstance())
 	{
 		ActiveMontageInstance->Pause();
 	}
@@ -51,6 +52,19 @@ void UCharacterComponent::PauseAnimationMontage() const
 
 void UCharacterComponent::TickComponent(const float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	CalculateBlink(DeltaTime);
+
+	LastBlink += DeltaTime;
+	if (LastBlink >= NextBlink)
+	{
+		bBLinking = true;
+		LastBlink = 0;
+	}
+
+	static UTellMeYourSecretGameSettings* Settings = UTellMeYourSecretGameSettings::Get();
+
+	SetMorphTarget(Settings->EyesClosedName, EyeCloseMorph);
+
 	if (!bSwitchEyes || !LookAtActorPtr.IsValid())
 	{
 		return;
@@ -74,14 +88,14 @@ void UCharacterComponent::TickComponent(const float DeltaTime, ELevelTick TickTy
 	}
 }
 
-void UCharacterComponent::SetAnimationOverride(UAnimationAsset* Animation, const bool bLoop) const
+void UCharacterComponent::SetAnimationOverride(UAnimSequenceBase* Animation, const bool bLoop) const
 {
 	GetAnimInstance<UCharacterAnimationInstance>()->SetAnimOverride(Animation, bLoop);
 }
 
 USkeletalMeshComponent* UCharacterComponent::GetMesh() const
 {
-	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	const ACharacter* Character = Cast<ACharacter>(GetOwner());
 	return Character->GetMesh();
 }
 
@@ -170,5 +184,42 @@ void UCharacterComponent::BeginPlay()
 	if (CharacterData)
 	{
 		CharacterData = ReputationSystem->GetCharacter(CharacterData->Identifier);
+	}
+}
+
+void UCharacterComponent::CalculateBlink(const float DeltaSeconds)
+{
+	static constexpr float UpperEnd = 1.0F;
+
+	if (bKeepEyesClosed)
+	{
+		EyeCloseMorph = UpperEnd;
+		return;
+	}
+
+	if (!bBLinking)
+	{
+		EyeCloseMorph = 0;
+		return;
+	}
+
+	if (bBlinkPhaseDown)
+	{
+		EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, UpperEnd, DeltaSeconds, 2500);
+
+		if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, UpperEnd, 0.000001))
+		{
+			bBlinkPhaseDown = false;
+		}
+		return;
+	}
+
+	EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, 0, DeltaSeconds, 2500);
+
+	if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, 0, 0.000001))
+	{
+		bBLinking = false;
+		bBlinkPhaseDown = true;
+		NextBlink = UKismetMathLibrary::RandomFloatInRange(4.5, 5.5);
 	}
 }

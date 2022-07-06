@@ -24,4 +24,6 @@ public:
 	UPROPERTY(Config, EditAnywhere)
 	TSoftObjectPtr<UDataTable> MorphTargetTemplates;
 
+	UPROPERTY(Config, EditAnywhere)
+	FName EyesClosedName = "Genesis8Female__eCTRLEyesClosed";
 };

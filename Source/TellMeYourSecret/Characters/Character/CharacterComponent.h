@@ -35,12 +35,18 @@ public:
 	template <class T>
 	T* GetAnimInstance() const
 	{
-		ACharacter* Character = Cast<ACharacter>(GetOwner());
+		const ACharacter* Character = Cast<ACharacter>(GetOwner());
 		return Cast<T>(Character->GetMesh()->GetAnimInstance());
 	}
 
 	UFUNCTION(BlueprintCallable)
-	void SetAnimationOverride(UAnimationAsset* Animation, const bool bLoop) const;
+	void SetAnimationOverride(UAnimSequenceBase* Animation, const bool bLoop) const;
+	
+	void SetEyesClosed(const bool bEyesClosed)
+	{
+		bKeepEyesClosed = bEyesClosed;
+		LastBlink       = 0;
+	}
 
 	UFUNCTION(BlueprintCallable)
 	USkeletalMeshComponent* GetMesh() const;
@@ -65,19 +71,32 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UDialogueContainer> DialogueWidgetClass;
-	
+
 	UPROPERTY()
 	UReputationSystem* ReputationSystem = nullptr;
 
 	UPROPERTY()
+	bool bKeepEyesClosed;
+
+	UPROPERTY()
 	TSoftObjectPtr<USkeletalMeshComponent> LookAtActorPtr;
 
-	bool  bSwitchEyes;
+	bool bSwitchEyes;
 	float LastEyeSwitch;
 	float NextEyeSwitch;
 	FName CurrentEye = TEXT("lEye");
+	
+	UPROPERTY(BlueprintReadOnly, Category=Blink)
+	float EyeCloseMorph;
 
 private:
 	UPROPERTY()
 	UDialogueContainer* DialogueWidget = nullptr;
+
+	bool bBLinking;
+	bool bBlinkPhaseDown;
+	float LastBlink;
+	float NextBlink;
+
+	void CalculateBlink(const float DeltaSeconds);
 };

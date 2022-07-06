@@ -2,7 +2,6 @@
 
 #include "OpenCloseEyesFlowNode.h"
 
-#include "TellMeYourSecret/Characters/Character/CharacterAnimationInstance.h"
 #include "TellMeYourSecret/Characters/Character/CharacterComponent.h"
 
 UOpenCloseEyesFlowNode::UOpenCloseEyesFlowNode(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
@@ -15,17 +14,10 @@ UOpenCloseEyesFlowNode::UOpenCloseEyesFlowNode(const FObjectInitializer& ObjectI
 void UOpenCloseEyesFlowNode::ExecuteInput(const FName& PinName)
 {
 	const TWeakObjectPtr<UCharacterComponent> CharacterComponent = FindCharacter();
-	if (!CharacterComponent.IsValid())
+	if (CharacterComponent.IsValid())
 	{
-		return;
+		CharacterComponent->SetEyesClosed(bClose);
 	}
 
-	UCharacterAnimationInstance* AnimationInstance = CharacterComponent->GetAnimInstance<UCharacterAnimationInstance>();
-	if (!AnimationInstance)
-	{
-		return AddStatusReport(TEXT("This Character has no CharacterAnimationInstance"));
-	}
-
-	AnimationInstance->SetEyesClosed(bClose);
 	TriggerFirstOutput(true);
 }
