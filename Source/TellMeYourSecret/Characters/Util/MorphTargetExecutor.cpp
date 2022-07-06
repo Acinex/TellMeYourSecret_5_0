@@ -10,7 +10,7 @@ void UMorphTargetExecutor::AddMorphTargetChange(UCharacterComponent* CharacterCo
 {
 	if (MorphTargetChange.Time == 0.0F)
 	{
-		CharacterComponent->GetMesh()->SetMorphTarget(MorphTargetChange.Name, MorphTargetChange.Value);
+		CharacterComponent->SetMorphTarget(MorphTargetChange.Name, MorphTargetChange.Value);
 		OnStepFinished.Broadcast();
 		return;
 	}
@@ -31,7 +31,7 @@ void UMorphTargetExecutor::Stop() const
 void UMorphTargetExecutor::ExecuteMorphTargetChange(UCharacterComponent* CharacterComponent, FMorphTargetExecution* TargetExecution)
 {
 	TargetExecution->Step();
-	CharacterComponent->GetMesh()->SetMorphTarget(TargetExecution->GetName(), TargetExecution->GetCurrentValue());
+	CharacterComponent->SetMorphTarget(TargetExecution->GetName(), TargetExecution->GetCurrentValue());
 
 	if (TargetExecution->GetCurrentValue() >= TargetExecution->GetTargetValue())
 	{

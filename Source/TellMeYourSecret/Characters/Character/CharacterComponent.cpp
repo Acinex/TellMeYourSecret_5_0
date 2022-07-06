@@ -19,7 +19,7 @@ UCharacterComponent::UCharacterComponent()
 
 void UCharacterComponent::PlayAnimationMontage(UAnimMontage* Montage, const FName StartSectionName, const float TimeToStartMontageAt, const FLatentActionInfo LatentInfo) const
 {
-	ACharacter*           Character           = Cast<ACharacter>(GetOwner());
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
 
 	if (LatentActionManager.FindExistingAction<FPlayAnimationAction>(LatentInfo.CallbackTarget, LatentInfo.UUID) == nullptr)
@@ -35,7 +35,7 @@ void UCharacterComponent::StopAnimationMontage(UAnimMontage* Montage) const
 
 void UCharacterComponent::PauseAnimationMontage() const
 {
-	ACharacter*    Character    = Cast<ACharacter>(GetOwner());
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 	if (!AnimInstance)
 	{
@@ -144,6 +144,17 @@ UDialogueContainer* UCharacterComponent::GetDialogueWidget() const
 	}
 
 	return nullptr;
+}
+
+void UCharacterComponent::SetMorphTarget(const FName& Name, const float Value) const
+{
+	TArray<USkeletalMeshComponent*> Components;
+	GetOwner()->GetComponents<USkeletalMeshComponent>(Components);
+
+	for (USkeletalMeshComponent* Component : Components)
+	{
+		Component->SetMorphTarget(Name, Value);
+	}
 }
 
 // Called when the game starts

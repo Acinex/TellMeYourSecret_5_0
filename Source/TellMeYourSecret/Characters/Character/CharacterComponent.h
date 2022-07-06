@@ -7,6 +7,7 @@
 #include "FlowComponent.h"
 #include "TellMeYourSecret/Characters/CharacterData.h"
 #include "GameFramework/Character.h"
+#include "TellMeYourSecret/Characters/Util/MorphTargetChange.h"
 
 #include "CharacterComponent.generated.h"
 
@@ -53,6 +54,7 @@ public:
 	virtual void SetLookAtTarget(USkeletalMeshComponent* Target);
 
 	UDialogueContainer* GetDialogueWidget() const;
+	void SetMorphTarget(const FName& Name, float Value) const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UCharacterData* CharacterData = nullptr;

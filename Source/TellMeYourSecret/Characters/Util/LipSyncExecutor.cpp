@@ -101,7 +101,7 @@ void ULipSyncExecutor::FinishLetter()
 	{
 		for (const FName MorphTarget : FLipSyncUtil::GetMorphTargets())
 		{
-			NonPlayerComponent->GetMesh()->SetMorphTarget(MorphTarget, 0);
+			NonPlayerComponent->SetMorphTarget(MorphTarget, 0);
 		}
 
 		OnCompleted.Broadcast();

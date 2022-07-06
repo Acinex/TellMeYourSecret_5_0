@@ -73,7 +73,7 @@ void UMorphTargetFlowNode::PostEditChangeProperty(FPropertyChangedEvent& Propert
 
 	UE_LOG(LogTemp, Log, TEXT("Property was changed: %s"), *PropertyChangedEvent.GetPropertyName().ToString())
 
-	static TArray<FName> Properties = {FName("Name"), FName("Value"), FName("Time"), FName("Steps"), FName("MorphTargets")};
+	static TArray Properties = {FName("Name"), FName("Value"), FName("Time"), FName("Steps"), FName("MorphTargets")};
 
 	if (Properties.Contains(PropertyChangedEvent.GetPropertyName()))
 	{
