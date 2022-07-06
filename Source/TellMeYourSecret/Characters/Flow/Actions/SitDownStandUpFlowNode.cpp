@@ -7,7 +7,6 @@
 #include "TellMeYourSecret/Characters/NonPlayerComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "TellMeYourSecret/Components/ApproachComponent.h"
-#include "TellMeYourSecret/Log.h"
 
 USitDownStandUpFlowNode::USitDownStandUpFlowNode(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
 {
@@ -112,17 +111,17 @@ void USitDownStandUpFlowNode::OnLoad_Implementation()
 
 void USitDownStandUpFlowNode::PreloadContent()
 {
-	if(!SitDown.IsNull())
+	if (!SitDown.IsNull())
 	{
 		// ReSharper disable once CppExpressionWithoutSideEffects
 		SitDown.LoadSynchronous();
 	}
-	if(!StandUp.IsNull())
+	if (!StandUp.IsNull())
 	{
 		// ReSharper disable once CppExpressionWithoutSideEffects
 		StandUp.LoadSynchronous();
 	}
-	if(!Idle.IsNull())
+	if (!Idle.IsNull())
 	{
 		// ReSharper disable once CppExpressionWithoutSideEffects
 		Idle.LoadSynchronous();
@@ -156,7 +155,7 @@ void USitDownStandUpFlowNode::DoStandUp()
 	LatentInfo.UUID = rand();
 	LatentInfo.Linkage = 0;
 	LatentInfo.ExecutionFunction = TEXT("IsStanding");
-	NonPlayerComponent->PlayAnimationMontage(StandUp.Get(), StandUpSection, 0, LatentInfo);
+	NonPlayerComponent->PlayAnimationMontage(StandUp.LoadSynchronous(), StandUpSection, 0, LatentInfo);
 
 	FTimerHandle Handle;
 	FTimerDelegate Delegate;
@@ -190,13 +189,20 @@ void USitDownStandUpFlowNode::ApplyIdle()
 	UCapsuleComponent* CapsuleComponent = NonPlayerComponent->GetOwner()->FindComponentByClass<UCapsuleComponent>();
 	CapsuleComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 	CapsuleComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	NonPlayerComponent->SetAnimationOverride(Idle.Get(), true);
+	NonPlayerComponent->SetAnimationOverride(Idle.LoadSynchronous(), true);
 }
 
 void USitDownStandUpFlowNode::IsSitting()
 {
 	ApplyIdle();
-	TriggerOutput(TEXT("Idle"));
+
+	FTimerHandle Handle;
+	FTimerDelegate Delegate;
+	Delegate.BindLambda([this]
+	{
+		TriggerOutput(TEXT("Idle"));
+	});
+	GetWorld()->GetTimerManager().SetTimer(Handle, Delegate, 0.2, false);
 }
 
 void USitDownStandUpFlowNode::IsStanding()
@@ -229,7 +235,7 @@ void USitDownStandUpFlowNode::Approached()
 
 	ApproachComponent->SetOccupied(true);
 
-	NonPlayerComponent->PlayAnimationMontage(SitDown.Get(), SitDownSection, 0, LatentInfo);
+	NonPlayerComponent->PlayAnimationMontage(SitDown.LoadSynchronous(), SitDownSection, 0, LatentInfo);
 
 	State = ESitDownStandUpFlowExecutionState::SitDown;
 
@@ -237,7 +243,7 @@ void USitDownStandUpFlowNode::Approached()
 	FTimerDelegate Delegate;
 	Delegate.BindLambda([NonPlayerComponent, this]
 	{
-		NonPlayerComponent->SetAnimationOverride(Idle.Get(), true);
+		NonPlayerComponent->SetAnimationOverride(Idle.LoadSynchronous(), true);
 	});
 	GetWorld()->GetTimerManager().SetTimer(Handle, Delegate, 0.1, false);
 }

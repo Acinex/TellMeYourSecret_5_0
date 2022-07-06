@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "ApproachAction.h"
-#include "TellMeYourSecret/Characters/Flow/Animations/AbstractMontageFlowNode.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "TellMeYourSecret/Characters/Flow/Animations/AbstractMontageFlowNode.h"
 
 #include "InteractFlowNode.generated.h"
 

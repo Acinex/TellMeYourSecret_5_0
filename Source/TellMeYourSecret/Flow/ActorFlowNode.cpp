@@ -5,6 +5,7 @@
 #include "FlowAsset.h"
 #include "FlowComponent.h"
 #include "FlowSubsystem.h"
+#include "Kismet/GameplayStatics.h"
 
 #if WITH_EDITOR
 FString UActorFlowNode::GetNodeDescription() const
@@ -35,10 +36,27 @@ AActor* UActorFlowNode::FindActor()
 
 AActor* UActorFlowNode::FindActor(const FGameplayTagContainer Tags)
 {
+	TArray<AActor*> Actors;
+
 	for (const TWeakObjectPtr<UFlowComponent>& FoundComponent : GetFlowSubsystem()->GetComponents<UFlowComponent>(Tags, EGameplayContainerMatchType::All))
 	{
-		return FoundComponent->GetOwner();
+		Actors.Add(FoundComponent->GetOwner());
 	}
+
+	if (Actors.Num())
+	{
+		if (Actors.Num() == 1)
+		{
+			return Actors[0];
+		}
+
+		if (const AActor* Executor = Cast<UFlowComponent>(GetFlowAsset()->GetOwner())->GetOwner())
+		{
+			float Distance;
+			return UGameplayStatics::FindNearestActor(Executor->GetActorLocation(), Actors, Distance);
+		}
+	}
+
 
 	AddStatusReport(TEXT("No Actor found for ") + GetIdentityTagsDescription(Tags));
 	return nullptr;
