@@ -35,7 +35,7 @@ void UPlay3DSoundFlowNode::ExecuteInput(const FName& PinName)
 		}
 		else
 		{
-			AudioComponent->SetSound(Sound.Get());
+			AudioComponent->SetSound(Sound.LoadSynchronous());
 			AudioComponent->Play();
 		}
 		TriggerOutput(TEXT("Playing"), false);
@@ -78,3 +78,12 @@ UObject* UPlay3DSoundFlowNode::GetAssetToEdit()
 	return Sound.LoadSynchronous();
 }
 #endif
+
+void UPlay3DSoundFlowNode::PreloadContent()
+{
+	if(!Sound.IsNull())
+	{
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		Sound.LoadSynchronous();
+	}
+}

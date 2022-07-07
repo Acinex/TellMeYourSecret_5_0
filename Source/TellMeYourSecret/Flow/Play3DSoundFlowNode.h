@@ -29,4 +29,6 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TSoftObjectPtr<USoundBase> Sound;
+
+	virtual void PreloadContent() override;
 };
