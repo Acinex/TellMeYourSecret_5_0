@@ -8,6 +8,7 @@
 #include "TellMeYourSecret/Characters/UI/DialogueContainer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TellMeYourSecret/Log.h"
 #include "TellMeYourSecret/TellMeYourSecretGameSettings.h"
 #include "TellMeYourSecret/Characters/ReputationSystem.h"
 #include "TellMeYourSecret/GameInstances/TellMeYourSecretGameInstance.h"
@@ -167,6 +168,12 @@ void UCharacterComponent::SetMorphTarget(const FName& Name, const float Value) c
 
 	for (USkeletalMeshComponent* Component : Components)
 	{
+		if (!IsValid(Component->SkeletalMesh))
+		{
+			UE_LOG(LogTellMeYourSecret, Error, TEXT("SkeletalMeshComponent %s from %s has no Mesh"), *Component->GetName(), *GetOwner()->GetActorLabel())
+			continue;
+		}
+
 		/*
 		 * Because we have different names for the morphtargets we can't just use the complete name.
 		 * But all names have the same pattern and end with the specific morphtarget name.
@@ -206,45 +213,45 @@ void UCharacterComponent::BeginPlay()
 	 * Since the character's name can be changed by the settings we need to
 	 * override this characterData with those from the reputationSystem so we can see the name in the dialogues
 	 */
-		if (CharacterData)
-		{
-			CharacterData = ReputationSystem->GetCharacter(CharacterData->Identifier);
-		}
-	}
-
-	void UCharacterComponent::CalculateBlink(const float DeltaSeconds)
+	if (CharacterData)
 	{
-		static constexpr float UpperEnd = 1.0F;
-
-		if (bKeepEyesClosed)
-		{
-			EyeCloseMorph = UpperEnd;
-			return;
-		}
-
-		if (!bBLinking)
-		{
-			EyeCloseMorph = 0;
-			return;
-		}
-
-		if (bBlinkPhaseDown)
-		{
-			EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, UpperEnd, DeltaSeconds, 2500);
-
-			if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, UpperEnd, 0.000001))
-			{
-				bBlinkPhaseDown = false;
-			}
-			return;
-		}
-
-		EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, 0, DeltaSeconds, 2500);
-
-		if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, 0, 0.000001))
-		{
-			bBLinking = false;
-			bBlinkPhaseDown = true;
-			NextBlink = UKismetMathLibrary::RandomFloatInRange(4.5, 5.5);
-		}
+		CharacterData = ReputationSystem->GetCharacter(CharacterData->Identifier);
 	}
+}
+
+void UCharacterComponent::CalculateBlink(const float DeltaSeconds)
+{
+	static constexpr float UpperEnd = 1.0F;
+
+	if (bKeepEyesClosed)
+	{
+		EyeCloseMorph = UpperEnd;
+		return;
+	}
+
+	if (!bBLinking)
+	{
+		EyeCloseMorph = 0;
+		return;
+	}
+
+	if (bBlinkPhaseDown)
+	{
+		EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, UpperEnd, DeltaSeconds, 2500);
+
+		if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, UpperEnd, 0.000001))
+		{
+			bBlinkPhaseDown = false;
+		}
+		return;
+	}
+
+	EyeCloseMorph = UKismetMathLibrary::FInterpTo_Constant(EyeCloseMorph, 0, DeltaSeconds, 2500);
+
+	if (UKismetMathLibrary::NearlyEqual_FloatFloat(EyeCloseMorph, 0, 0.000001))
+	{
+		bBLinking = false;
+		bBlinkPhaseDown = true;
+		NextBlink = UKismetMathLibrary::RandomFloatInRange(4.5, 5.5);
+	}
+}
