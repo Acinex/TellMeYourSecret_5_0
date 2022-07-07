@@ -61,6 +61,7 @@ public:
 
 	UDialogueContainer* GetDialogueWidget() const;
 	void SetMorphTarget(const FName& Name, float Value) const;
+	void ClearMorphTargets() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UCharacterData* CharacterData = nullptr;

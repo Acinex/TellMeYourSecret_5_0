@@ -27,7 +27,7 @@ void UMorphTargetFlowNode::ExecuteInput(const FName& PinName)
 
 	if (bClearMorphTargets)
 	{
-		NonPlayerComponent->GetMesh()->ClearMorphTargets();
+		NonPlayerComponent->ClearMorphTargets();
 	}
 
 	Executor = NewObject<UMorphTargetExecutor>(this, TEXT("Executor"));
