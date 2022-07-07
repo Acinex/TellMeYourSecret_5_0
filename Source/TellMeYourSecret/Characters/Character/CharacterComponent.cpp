@@ -163,6 +163,12 @@ UDialogueContainer* UCharacterComponent::GetDialogueWidget() const
 
 void UCharacterComponent::SetMorphTarget(const FName& Name, const float Value) const
 {
+	const float* Current = GetMesh()->GetMorphTargetCurves().Find(FName("Genesis8Female__" + Name.ToString()));
+	if (Current && *Current == Value)
+	{
+		return;
+	}
+
 	TArray<USkeletalMeshComponent*> Components;
 	GetOwner()->GetComponents<USkeletalMeshComponent>(Components);
 
@@ -170,7 +176,6 @@ void UCharacterComponent::SetMorphTarget(const FName& Name, const float Value) c
 	{
 		if (!IsValid(Component->SkeletalMesh))
 		{
-			UE_LOG(LogTellMeYourSecret, Error, TEXT("SkeletalMeshComponent %s from %s has no Mesh"), *Component->GetName(), *GetOwner()->GetActorLabel())
 			continue;
 		}
 
