@@ -32,13 +32,13 @@ public:
 	bool IsCompleted() const { return bCompleted; }
 
 protected:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, meta=(FlowOutput))
 	FText Title;
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, meta=(FlowOutput))
 	FText Description;
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, meta=(FlowOutput))
 	EQuestType Type;
-	UPROPERTY(SaveGame)
+	UPROPERTY(SaveGame, meta=(FlowOutput))
 	bool bFollowed;
 	UPROPERTY(SaveGame)
 	bool bCompleted;

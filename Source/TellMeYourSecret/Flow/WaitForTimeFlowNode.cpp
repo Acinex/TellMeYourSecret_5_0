@@ -33,12 +33,17 @@ void UWaitForTimeFlowNode::ExecuteInput(const FName& PinName)
 #if WITH_EDITOR
 FString UWaitForTimeFlowNode::GetStatusString() const
 {
+	FStringFormatNamedArguments Args;
+	Args.Add(TEXT("Hour"), Hour);
+	Args.Add(TEXT("Minute"), Minute);
+	FString Status = FString::Format(TEXT("Waiting for {Hour}:{Minute}"), Args);
+
 	if (IsValid(TimeManager))
 	{
-		return TimeManager->GetTimeAsText().ToString();
+		return Status + " -- " + TimeManager->GetTimeAsText().ToString();
 	}
 
-	return "";
+	return Status;
 }
 #endif
 
@@ -49,10 +54,6 @@ void UWaitForTimeFlowNode::Cleanup()
 
 void UWaitForTimeFlowNode::TimeChanged(const int32 CurrentHour, const int32 CurrentMinute)
 {
-	FStringFormatNamedArguments Args;
-	Args.Add(TEXT("Hour"), CurrentHour);
-	Args.Add(TEXT("Minute"), CurrentMinute);
-
 	if (CurrentHour >= Hour && CurrentMinute >= Minute)
 	{
 		TriggerOutput(TEXT("Completed"), true);

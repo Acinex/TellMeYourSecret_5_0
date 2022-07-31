@@ -16,17 +16,17 @@ class TELLMEYOURSECRET_API UWaitForTimeFlowNode : public UFlowNode
 	GENERATED_BODY()
 public:
 	explicit UWaitForTimeFlowNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+
 	virtual void ExecuteInput(const FName& PinName) override;
 
 #if WITH_EDITOR
 	virtual FString GetStatusString() const override;
 #endif
-	
+
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(FlowInput))
 	int32 Hour;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(FlowInput))
 	int32 Minute;
 
 	virtual void Cleanup() override;
