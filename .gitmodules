@@ -1,4 +1,4 @@
 [submodule "Plugins/Flow"]
 	path = Plugins/Flow
 	url = https://github.com/Mephiztopheles/FlowGraph.git
-	branch = 5.0
+	branch = variables
