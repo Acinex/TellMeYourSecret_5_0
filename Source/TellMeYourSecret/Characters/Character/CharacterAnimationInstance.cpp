@@ -2,8 +2,10 @@
 
 #include "CharacterAnimationInstance.h"
 
+#include "CharacterBase.h"
 #include "TellMeYourSecret/Characters/NonPlayerComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void UCharacterAnimationInstance::SetAnimOverride(UAnimSequenceBase* Animation, const bool bLoop)
@@ -24,10 +26,33 @@ void UCharacterAnimationInstance::NativeUpdateAnimation(const float DeltaSeconds
 		bUseEyeLookAt = NonPlayerComponent->GetEyeLookAtLocation(EyeLookAtLocation);
 	}
 
-	const APawn* PawnOwner = TryGetPawnOwner();
-	if (PawnOwner != nullptr)
+	if (Character)
 	{
-		bIsSwimming = PawnOwner->GetMovementComponent()->IsSwimming();
+		LeftFootEffectorLocation = Character->IKOffsetLeftFoot;
+		RightFootEffectorLocation = Character->IKOffsetRightFoot;
+
+		LeftFootSurface = Character->LeftFootSurface;
+		RightFootSurface = Character->RightFootSurface;
+		bIsSwimming = Character->GetMovementComponent()->IsSwimming();
+
+
+		UE_LOG(LogTemp, Warning, TEXT("Character->IKOffsetLeftFoot: %f"), Character->IKOffsetLeftFoot)
+
+		if (Character->IKOffsetLeftFoot == 0)
+		{
+			if (USoundBase* Sound = SelectSurfaceSound(LeftFootSurface))
+			{
+				UGameplayStatics::PlaySoundAtLocation(Character, Sound, LeftFootEffectorLocation);
+			}
+		}
+
+		if (Character->IKOffsetRightFoot == 0)
+		{
+			if (USoundBase* Sound = SelectSurfaceSound(RightFootSurface))
+			{
+				UGameplayStatics::PlaySoundAtLocation(Character, Sound, RightFootEffectorLocation);
+			}
+		}
 	}
 }
 
@@ -35,7 +60,7 @@ void UCharacterAnimationInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
-	const APawn* PawnOwner = TryGetPawnOwner();
+	Character = Cast<ACharacterBase>(TryGetPawnOwner());
 
-	NonPlayerComponent = PawnOwner->FindComponentByClass<UNonPlayerComponent>();
+	NonPlayerComponent = Character->FindComponentByClass<UNonPlayerComponent>();
 }

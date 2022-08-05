@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharacterAnimationInstance.generated.h"
 
+class ACharacterBase;
 class UNonPlayerComponent;
 /**
  * 
@@ -21,6 +22,8 @@ public:
 	virtual void NativeBeginPlay() override;
 
 protected:
+	UPROPERTY(BlueprintReadOnly)
+	ACharacterBase* Character;
 	UPROPERTY(BlueprintReadOnly)
 	UNonPlayerComponent* NonPlayerComponent;
 
@@ -53,7 +56,14 @@ protected:
 	bool bIsSwimming;
 
 	UPROPERTY(BlueprintReadOnly, Category=Blink)
-	FRotator UpperEyeLidRotation;
+	FVector RightFootEffectorLocation;
 	UPROPERTY(BlueprintReadOnly, Category=Blink)
-	FRotator LowerEyeLidRotation;
+	FVector LeftFootEffectorLocation;
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EPhysicalSurface> LeftFootSurface;
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EPhysicalSurface> RightFootSurface;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	USoundBase* SelectSurfaceSound(EPhysicalSurface Surface);
 };
