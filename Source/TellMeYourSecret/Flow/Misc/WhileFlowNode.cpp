@@ -6,7 +6,7 @@ UWhileFlowNode::UWhileFlowNode(const FObjectInitializer& ObjectInitializer): Sup
 	Category = TEXT("Misc");
 #endif
 
-	OutputPins.Add({TEXT("Break"), TEXT("Stop repetition and call Out on next cycle")});
+	InputPins.Add({TEXT("Break"), TEXT("Stop repetition and call Out on next cycle")});
 
 	OutputPins.Empty();
 	OutputPins.Add({TEXT("Do"), TEXT("Repeatedly called whenever start it Called")});
