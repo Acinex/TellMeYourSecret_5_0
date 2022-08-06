@@ -52,7 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category=Animation)
 	FName StandUpSection;
 
-	UPROPERTY(EditAnywhere, Category=Identifier)
+	UPROPERTY(EditAnywhere, Category=Identifier, meta=(FlowInput, FlowOutput))
 	FGameplayTagContainer ChairTags;
 
 	virtual void OnLoad_Implementation() override;

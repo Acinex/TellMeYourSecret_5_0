@@ -35,10 +35,9 @@ void UCharacterAnimationInstance::NativeUpdateAnimation(const float DeltaSeconds
 		RightFootSurface = Character->RightFootSurface;
 		bIsSwimming = Character->GetMovementComponent()->IsSwimming();
 
+		UE_LOG(LogTemp, Warning, TEXT("Character->IKOffsetLeftFoot: %f"), *Character->IKOffsetLeftFoot.ToString())
 
-		UE_LOG(LogTemp, Warning, TEXT("Character->IKOffsetLeftFoot: %f"), Character->IKOffsetLeftFoot)
-
-		if (Character->IKOffsetLeftFoot == 0)
+		if (Character->IKOffsetLeftFoot.IsNearlyZero())
 		{
 			if (USoundBase* Sound = SelectSurfaceSound(LeftFootSurface))
 			{
@@ -46,7 +45,7 @@ void UCharacterAnimationInstance::NativeUpdateAnimation(const float DeltaSeconds
 			}
 		}
 
-		if (Character->IKOffsetRightFoot == 0)
+		if (Character->IKOffsetRightFoot.IsNearlyZero())
 		{
 			if (USoundBase* Sound = SelectSurfaceSound(RightFootSurface))
 			{

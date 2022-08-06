@@ -65,8 +65,8 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	IKOffsetLeftFoot = FMath::FInterpTo(IKOffsetLeftFoot, FootTrace(LeftFootSocket, LeftFootSurface), DeltaTime, IKInterpSpeed);
-	IKOffsetRightFoot = FMath::FInterpTo(IKOffsetRightFoot, FootTrace(RightFootSocket, RightFootSurface), DeltaTime, IKInterpSpeed);
+	IKOffsetLeftFoot = FMath::VInterpTo(IKOffsetLeftFoot, FootTrace(LeftFootSocket, LeftFootSurface), DeltaTime, IKInterpSpeed);
+	IKOffsetRightFoot = FMath::VInterpTo(IKOffsetRightFoot, FootTrace(RightFootSocket, RightFootSurface), DeltaTime, IKInterpSpeed);
 }
 
 FVector ACharacterBase::FootTrace(FName Socket, TEnumAsByte<EPhysicalSurface>& OutSurface) const

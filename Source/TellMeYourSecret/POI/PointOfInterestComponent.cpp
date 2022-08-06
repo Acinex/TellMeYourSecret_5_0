@@ -41,11 +41,16 @@ void UPointOfInterestComponent::UpdateActorLabel()
 
 FVector UPointOfInterestComponent::FindRandomSpot_Implementation()
 {
-	UBoxComponent* BoxComponent = GetOwner()->FindComponentByClass<UBoxComponent>();
+	const UBoxComponent* BoxComponent = GetOwner()->FindComponentByClass<UBoxComponent>();
 
 	if (IsValid(BoxComponent))
 	{
 		return UKismetMathLibrary::RandomPointInBoundingBox(GetOwner()->GetActorLocation(), BoxComponent->GetUnscaledBoxExtent());
+	}
+
+	if(const AVolume* Volume = Cast<AVolume>(GetOwner()))
+	{
+		return UKismetMathLibrary::RandomPointInBoundingBox(Volume->GetActorLocation(), Volume->GetBounds().BoxExtent);
 	}
 
 	return GetOwner()->GetActorLocation();
