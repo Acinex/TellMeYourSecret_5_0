@@ -125,7 +125,7 @@ void UShowDialogueFlowNode::RefreshOutputs()
 
 	for (FText Answer : Answers)
 	{
-		OutputPins.Add({Answer, Answer.ToString()});
+		OutputPins.Add({Answer.ToString(), FText::FromString(FString::FromInt(OutputPins.Num())), Answer.ToString()});
 	}
 }
 

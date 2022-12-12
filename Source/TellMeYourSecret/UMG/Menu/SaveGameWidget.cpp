@@ -41,7 +41,6 @@ void USaveGameWidget::NativeConstruct()
 void USaveGameWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
-	Border->SetColor(EPalette::Pink);
 	HoverBox->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	if (UGameplayStatics::IsGamePaused(this))
 	{
@@ -56,7 +55,6 @@ void USaveGameWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPoi
 void USaveGameWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseLeave(InMouseEvent);
-	Border->SetColor(EPalette::White);
 	HoverBox->SetVisibility(ESlateVisibility::Hidden);
 }
 

@@ -2,9 +2,6 @@
 
 #include "CreateSaveDialogue.h"
 
-#include "Components/EditableTextBox.h"
-#include "Widgets/WSModernButton.h"
-
 void UCreateSaveDialogue::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -15,16 +12,16 @@ void UCreateSaveDialogue::NativeOnInitialized()
 	SaveSlotNameTextBox->OnTextCommitted.AddDynamic(this, &UCreateSaveDialogue::SaveSlotNameCommit);
 }
 
-void UCreateSaveDialogue::Cancel(UWidgetStudioButtonBase* CallingButton)
+void UCreateSaveDialogue::Cancel()
 {
 	OnSaveResponse.Broadcast(false, TEXT(""));
-	Super::Cancel(CallingButton);
+	Super::Cancel();
 }
 
-void UCreateSaveDialogue::Confirm(UWidgetStudioButtonBase* CallingButton)
+void UCreateSaveDialogue::Confirm()
 {
 	OnSaveResponse.Broadcast(true, SaveSlotNameTextBox->GetText().ToString());
-	Super::Confirm(CallingButton);
+	Super::Confirm();
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
@@ -37,6 +34,6 @@ void UCreateSaveDialogue::SaveSlotNameCommit(const FText& Text, const ETextCommi
 {
 	if (CommitMethod == ETextCommit::OnEnter)
 	{
-		Confirm(nullptr);
+		Confirm();
 	}
 }

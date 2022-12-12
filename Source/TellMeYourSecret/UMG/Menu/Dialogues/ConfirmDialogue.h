@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <Components/Button.h>
+
 #include "CoreMinimal.h"
 
 #include "Blueprint/UserWidget.h"
@@ -36,13 +38,13 @@ public:
 
 protected:
 	UPROPERTY(meta=(BindWidget))
-	UWidgetStudioModernButton* CancelButton;
+	UButton* CancelButton;
 	UPROPERTY(meta=(BindWidget))
-	UWidgetStudioModernButton* ConfirmButton;
+	UButton* ConfirmButton;
 
 	UFUNCTION()
-	virtual void Cancel(UWidgetStudioButtonBase* CallingButton);
+	virtual void Cancel();
 
 	UFUNCTION()
-	virtual void Confirm(UWidgetStudioButtonBase* CallingButton);
+	virtual void Confirm();
 };

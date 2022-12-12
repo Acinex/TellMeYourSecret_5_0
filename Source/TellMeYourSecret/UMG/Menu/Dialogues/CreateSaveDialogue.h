@@ -5,11 +5,10 @@
 #include "CoreMinimal.h"
 
 #include "ConfirmDialogue.h"
-#include "Widgets/WSModernTextField.h"
+#include "Components/EditableTextBox.h"
 
 #include "CreateSaveDialogue.generated.h"
 
-class UEditableTextBox;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSaveResponse, bool, Result, FString, SlotName);
 
 /**
@@ -25,11 +24,11 @@ public:
 
 protected:
 	UPROPERTY(meta=(BindWidget))
-	UWidgetStudioModernTextField* SaveSlotNameTextBox;
+	UEditableTextBox* SaveSlotNameTextBox;
 
 	virtual void NativeOnInitialized() override;
-	virtual void Cancel(UWidgetStudioButtonBase* CallingButton) override;
-	virtual void Confirm(UWidgetStudioButtonBase* CallingButton) override;
+	virtual void Cancel() override;
+	virtual void Confirm() override;
 
 private:
 	UFUNCTION()

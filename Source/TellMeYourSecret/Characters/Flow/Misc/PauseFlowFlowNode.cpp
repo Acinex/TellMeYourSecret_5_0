@@ -26,7 +26,7 @@ void UPauseFlowFlowNode::ExecuteInput(const FName& PinName)
 	if (LoadedSaveGame)
 	{
 		NonPlayerComponent->SaveRootFlow(LoadedSaveGame->FlowInstances);
-		NonPlayerComponent->FinishRootFlow(EFlowFinishPolicy::Abort);
+		NonPlayerComponent->FinishRootFlow(GetFlowAsset(), EFlowFinishPolicy::Abort);
 	}
 
 	TriggerFirstOutput(true);

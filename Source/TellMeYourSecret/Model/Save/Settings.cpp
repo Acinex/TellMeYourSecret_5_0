@@ -1,3 +1,6 @@
 #include "Settings.h"
 
-const FString USettings::SlotName = TEXT("Settings");
+USettings* USettings::Get()
+{
+	return GEngine ? CastChecked<USettings>(GEngine->GetGameUserSettings()) : nullptr;
+}

@@ -2,7 +2,6 @@
 
 #include "ConfirmDialogue.h"
 
-#include "Widgets/WSModernButton.h"
 
 void UConfirmDialogue::NativeOnInitialized()
 {
@@ -12,13 +11,13 @@ void UConfirmDialogue::NativeOnInitialized()
 	ConfirmButton->OnReleased.AddDynamic(this, &UConfirmDialogue::Confirm);
 }
 
-void UConfirmDialogue::Cancel(UWidgetStudioButtonBase* CallingButton)
+void UConfirmDialogue::Cancel()
 {
 	RemoveFromViewport();
 	OnResponse.Broadcast(false);
 }
 
-void UConfirmDialogue::Confirm(UWidgetStudioButtonBase* CallingButton)
+void UConfirmDialogue::Confirm()
 {
 	RemoveFromViewport();
 	OnResponse.Broadcast(true);

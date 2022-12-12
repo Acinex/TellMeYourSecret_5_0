@@ -37,33 +37,19 @@ void UTellMeYourSecretGameInstance::Init()
 
 	UGameUserSettings::GetGameUserSettings()->ApplySettings(false);
 
-	USaveGame* LoadGameFromSlot = nullptr;
-
-	if (UGameplayStatics::DoesSaveGameExist(USettings::SlotName, 0))
-	{
-		LoadGameFromSlot = UGameplayStatics::LoadGameFromSlot(USettings::SlotName, 0);
-	}
-
 	for (FString LocalizedCultureName : FTextLocalizationManager::Get().GetLocalizedCultureNames(ELocalizationLoadFlags::Game))
 	{
 		FCulturePtr Culture = FInternationalization::Get().GetCulture(LocalizedCultureName);
 		AvailableCultures.Add(Culture);
 	}
 
-	if (LoadGameFromSlot)
+	if (USettings* LoadGameFromSlot = USettings::Get())
 	{
-		Settings = Cast<USettings>(LoadGameFromSlot);
+		Settings = LoadGameFromSlot;
 	}
 	else
 	{
 		Settings = NewObject<USettings>(this);
-	}
-
-	UGameplayStatics::SetBaseSoundMix(this, GameData->SoundMix);
-
-	for (const auto Tuple : GameData->SoundClasses)
-	{
-		UGameplayStatics::SetSoundMixClassOverride(this, GameData->SoundMix, Tuple.Value, GetVolume(Tuple.Key), 1.0F, 0.0F);
 	}
 
 	if (USmartphone* Smartphone = GetSubsystem<USmartphone>())
@@ -299,7 +285,10 @@ void UTellMeYourSecretGameInstance::UpdatePlayerName(FString PlayerName) const
 
 void UTellMeYourSecretGameInstance::SaveSettings() const
 {
-	UGameplayStatics::SaveGameToSlot(Settings, USettings::SlotName, 0);
+	if (Settings)
+	{
+		Settings->SaveSettings();
+	}
 }
 
 void UTellMeYourSecretGameInstance::LevelLoaded()

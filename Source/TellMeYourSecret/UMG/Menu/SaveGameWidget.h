@@ -6,7 +6,6 @@
 
 #include "Blueprint/UserWidget.h"
 #include "TellMeYourSecret/Model/Save/SaveGameInfo.h"
-#include "Widgets/WSModernCard.h"
 
 #include "SaveGameWidget.generated.h"
 
@@ -53,8 +52,6 @@ protected:
 	UButton* StartGameButton;
 	UPROPERTY(meta=(BindWidget))
 	UPanelWidget* HoverBox;
-	UPROPERTY(meta=(BindWidget))
-	UWidgetStudioModernCard* Border;
 	UPROPERTY(meta=(BindWidget))
 	UWidgetSwitcher* LayoutSwitcher;
 

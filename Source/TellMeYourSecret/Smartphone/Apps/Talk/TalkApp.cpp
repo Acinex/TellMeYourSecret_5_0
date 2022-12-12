@@ -4,7 +4,6 @@
 #include "TellMeYourSecret/Characters/ReputationSystem.h"
 #include "Components/Button.h"
 #include "Components/ComboBoxString.h"
-#include "Components/EditableTextBox.h"
 #include "Components/ListView.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/GameplayStatics.h"
@@ -94,9 +93,7 @@ void UTalkApp::OpenChat(UObject* SelectedItem)
 	{
 		for (const FText Element : Messages->Messages)
 		{
-			FButtonOptions NewOption;
-			NewOption.Text = Element;
-			ChatComboBox->AddOption(NewOption);
+			ChatComboBox->AddOption(Element.ToString());
 		}
 	}
 
@@ -106,21 +103,21 @@ void UTalkApp::OpenChat(UObject* SelectedItem)
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void UTalkApp::Send(UWidgetStudioButtonBase* Button)
+void UTalkApp::Send()
 {
 
-	if(ChatComboBox->GetCurrentIndex() == -1)
+	if(ChatComboBox->GetSelectedIndex() == -1)
 	{
 		return;
 	}
 
-	if (UChatMessage* ChatMessage = SendChatMessage(ECharacterIdentifier::Player, Selected->With, ChatComboBox->GetCurrentOption().Text, {}); Selected && Selected->With == ChatMessage->With)
+	if (UChatMessage* ChatMessage = SendChatMessage(ECharacterIdentifier::Player, Selected->With, FText::FromString(ChatComboBox->GetSelectedOption()), {}); Selected && Selected->With == ChatMessage->With)
 	{
 		MessageList->AddItem(ChatMessage);
 	}
 
 	ChatComboBox->ClearOptions();
-	ChatComboBox->SetCurrentIndex(-1);
+	ChatComboBox->SetSelectedIndex(-1);
 	ChatComboBox->SetIsEnabled(false);
 	SendButton->SetIsEnabled(false);
 }

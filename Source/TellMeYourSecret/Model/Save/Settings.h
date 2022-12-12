@@ -1,27 +1,27 @@
 ﻿#pragma once
 #include "SaveGameInfo.h"
-#include "GameFramework/SaveGame.h"
+#include "GameFramework/GameUserSettings.h"
 #include "TellMeYourSecret/VolumeType.h"
 
 #include "Settings.generated.h"
 
 UCLASS()
-class TELLMEYOURSECRET_API USettings : public USaveGame
+class TELLMEYOURSECRET_API USettings : public UGameUserSettings
 {
 	GENERATED_BODY()
 
 public:
-	static const FString SlotName;
+	static USettings* Get();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+	UPROPERTY(config, VisibleAnywhere, BlueprintReadOnly, SaveGame)
 	FSaveGameInfo LastSaveSlot;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+	UPROPERTY(config, VisibleAnywhere, BlueprintReadOnly, SaveGame)
 	TArray<FSaveGameInfo> SaveGameInfos;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+	UPROPERTY(config, VisibleAnywhere, BlueprintReadOnly, SaveGame)
 	FString Language;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+	UPROPERTY(config, VisibleAnywhere, BlueprintReadOnly, SaveGame)
 	FString PlayerName = TEXT("John");
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+	UPROPERTY(config, VisibleAnywhere, BlueprintReadOnly, SaveGame)
 	TMap<EVolumeType, float> Volumes{
 		{EVolumeType::Effects, 0.5F},
 		{EVolumeType::Environment, 0.5F},

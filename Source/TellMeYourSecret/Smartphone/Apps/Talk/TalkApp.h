@@ -2,7 +2,6 @@
 
 #include "TellMeYourSecret/Smartphone/PhoneData.h"
 #include "TellMeYourSecret/Smartphone/Apps/AppWidget.h"
-#include "Widgets/WSModernComboBox.h"
 
 #include "TalkApp.generated.h"
 
@@ -37,9 +36,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(BindWidget))
     UListView* MessageList;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(BindWidget))
-    UWidgetStudioModernComboBox* ChatComboBox;
+    UComboBoxString* ChatComboBox;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(BindWidget))
-    UWidgetStudioModernButton* SendButton;
+    UButton* SendButton;
 
 private:
     UPROPERTY()
@@ -47,7 +46,7 @@ private:
     UFUNCTION()
     void OpenChat(UObject* SelectedItem);
     UFUNCTION()
-    void Send(UWidgetStudioButtonBase* Button);
+    void Send();
     UFUNCTION()
     void OnNotification(UAppWidget* App);
 

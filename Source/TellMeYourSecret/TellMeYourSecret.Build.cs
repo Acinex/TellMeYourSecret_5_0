@@ -38,7 +38,7 @@ public class TellMeYourSecret : ModuleRules
 			"Slate",
 			"SlateCore",
 			"Niagara",
-			"WidgetStudioRuntime"
+			"AudioModulation"
 		});
 	}
 }

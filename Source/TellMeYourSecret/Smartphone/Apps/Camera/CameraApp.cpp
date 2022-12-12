@@ -19,7 +19,7 @@ void UCameraApp::NativeDestruct()
 {
 	if (IsValid(Hud))
 	{
-		Hud->RemoveFromViewport();
+		Hud->RemoveFromParent();
 	}
 
 	Smartphone->DeactivateCamera();
