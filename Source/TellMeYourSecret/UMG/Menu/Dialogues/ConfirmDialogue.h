@@ -2,16 +2,10 @@
 
 #pragma once
 
-#include <Components/Button.h>
-
 #include "CoreMinimal.h"
-
 #include "Blueprint/UserWidget.h"
-
+#include "TellMeYourSecret/UMG/TMYSButton.h"
 #include "ConfirmDialogue.generated.h"
-
-class UWidgetStudioButtonBase;
-class UWidgetStudioModernButton;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FResponse, bool, Result);
 
@@ -22,6 +16,7 @@ UCLASS()
 class TELLMEYOURSECRET_API UConfirmDialogue : public UUserWidget
 {
 	GENERATED_BODY()
+
 public:
 	virtual void NativeOnInitialized() override;
 
@@ -38,9 +33,9 @@ public:
 
 protected:
 	UPROPERTY(meta=(BindWidget))
-	UButton* CancelButton;
+	UTMYSButton* CancelButton;
 	UPROPERTY(meta=(BindWidget))
-	UButton* ConfirmButton;
+	UTMYSButton* ConfirmButton;
 
 	UFUNCTION()
 	virtual void Cancel();

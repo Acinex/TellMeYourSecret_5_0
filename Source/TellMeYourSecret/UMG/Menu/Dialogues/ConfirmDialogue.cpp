@@ -2,23 +2,24 @@
 
 #include "ConfirmDialogue.h"
 
-
 void UConfirmDialogue::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	CancelButton->OnReleased.AddDynamic(this, &UConfirmDialogue::Cancel);
-	ConfirmButton->OnReleased.AddDynamic(this, &UConfirmDialogue::Confirm);
+	UCommonButtonBase::FCommonButtonEvent CommonButtonEvent = CancelButton->OnClicked();
+	CommonButtonEvent.AddUFunction(this, "Cancel");
+	CommonButtonEvent = ConfirmButton->OnClicked();
+	CommonButtonEvent.AddUFunction(this, "Confirm");
 }
 
 void UConfirmDialogue::Cancel()
 {
-	RemoveFromViewport();
+	RemoveFromParent();
 	OnResponse.Broadcast(false);
 }
 
 void UConfirmDialogue::Confirm()
 {
-	RemoveFromViewport();
+	RemoveFromParent();
 	OnResponse.Broadcast(true);
 }
