@@ -53,7 +53,7 @@ void ACharacterBase::OnConstruction(const FTransform& Transform)
 	{
 		if (USkeletalMeshComponent* SkeletalMeshComponent = Cast<USkeletalMeshComponent>(Component))
 		{
-			SkeletalMeshComponent->SetLeaderPoseComponent(GetMesh());
+			SkeletalMeshComponent->SetMasterPoseComponent(GetMesh());
 		}
 	}
 

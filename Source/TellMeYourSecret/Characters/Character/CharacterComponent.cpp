@@ -174,7 +174,7 @@ void UCharacterComponent::SetMorphTarget(const FName& Name, const float Value) c
 
 	for (USkeletalMeshComponent* Component : Components)
 	{
-		if (!IsValid(Component->GetSkeletalMeshAsset()))
+		if (!IsValid(Component->SkeletalMesh))
 		{
 			continue;
 		}

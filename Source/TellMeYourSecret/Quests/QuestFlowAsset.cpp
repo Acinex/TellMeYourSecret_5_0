@@ -17,7 +17,7 @@ void UQuestFlowAsset::StartFlow()
 	Super::StartFlow();
 }
 
-void UQuestFlowAsset::FinishFlow(const EFlowFinishPolicy InFinishPolicy, const bool bRemoveInstance /*= true*/)
+void UQuestFlowAsset::FinishFlow(const EFlowFinishPolicy InFinishPolicy)
 {
 	UQuestManager* QuestManager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UQuestManager>();
 	if (QuestManager)
@@ -25,7 +25,7 @@ void UQuestFlowAsset::FinishFlow(const EFlowFinishPolicy InFinishPolicy, const b
 		QuestManager->CompleteQuest(this);
 	}
 	
-	Super::FinishFlow(InFinishPolicy, bRemoveInstance);
+	Super::FinishFlow(InFinishPolicy);
 }
 
 void UQuestFlowAsset::OnLoad_Implementation()

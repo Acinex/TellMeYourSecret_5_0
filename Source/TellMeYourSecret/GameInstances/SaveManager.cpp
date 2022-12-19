@@ -57,7 +57,7 @@ void USaveManager::LoadGame(const FString& SlotName)
 	UFlowSubsystem* FlowSubsystem = GetGameInstance()->GetSubsystem<UFlowSubsystem>();
 	for (const TTuple<UObject*, UFlowAsset*> RootInstance : FlowSubsystem->GetRootInstances())
 	{
-		FlowSubsystem->FinishRootFlow(RootInstance.Key, RootInstance.Value, EFlowFinishPolicy::Abort);
+		FlowSubsystem->FinishRootFlow(RootInstance.Key, EFlowFinishPolicy::Abort);
 	}
 
 	FTimerHandle Handle;

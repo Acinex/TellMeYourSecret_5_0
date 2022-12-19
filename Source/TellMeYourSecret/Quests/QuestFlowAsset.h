@@ -20,7 +20,7 @@ class TELLMEYOURSECRET_API UQuestFlowAsset : public UFlowAsset
 public:
 	virtual void StartFlow() override;
 
-	virtual void FinishFlow(const EFlowFinishPolicy InFinishPolicy, const bool bRemoveInstance = true) override;
+	virtual void FinishFlow(const EFlowFinishPolicy InFinishPolicy) override;
 
 	UFUNCTION(BlueprintPure)
 	FText GetTitle() const { return Title; }
