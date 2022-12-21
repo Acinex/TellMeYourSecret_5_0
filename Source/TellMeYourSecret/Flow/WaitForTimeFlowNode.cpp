@@ -49,7 +49,8 @@ FString UWaitForTimeFlowNode::GetStatusString() const
 
 void UWaitForTimeFlowNode::Cleanup()
 {
-	TimeManager->OnTimeChanged.RemoveDynamic(this, &UWaitForTimeFlowNode::TimeChanged);
+	if (TimeManager)
+		TimeManager->OnTimeChanged.RemoveDynamic(this, &UWaitForTimeFlowNode::TimeChanged);
 }
 
 void UWaitForTimeFlowNode::TimeChanged(const int32 CurrentHour, const int32 CurrentMinute)
