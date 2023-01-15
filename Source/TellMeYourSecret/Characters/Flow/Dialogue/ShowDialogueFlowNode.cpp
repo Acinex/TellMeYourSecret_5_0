@@ -50,7 +50,7 @@ void UShowDialogueFlowNode::ExecuteInput(const FName& PinName)
 	DialogueContainer->SetDialogue(CharacterComponent->CharacterData, Text, Answers);
 
 	LipSyncExecutor = NewObject<ULipSyncExecutor>(this, TEXT("LipSyncExecutor"));
-	LipSyncExecutor->Start(CharacterComponent.Get(), {AudioTrack.Get(), AudioDelay, Syllables, LipSyncDelay, Montage.Get(), StartSectionName});
+	LipSyncExecutor->Start(CharacterComponent.Get(), {AudioTrack.LoadSynchronous(), AudioDelay, Syllables, LipSyncDelay, Montage.LoadSynchronous(), StartSectionName});
 
 	TWeakObjectPtr<UShowDialogueFlowNode> SelfWeakPtr(this);
 
@@ -70,10 +70,12 @@ void UShowDialogueFlowNode::ExecuteInput(const FName& PinName)
 
 			if (ChosenOption == -1)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Continue Dialog"))
 				SelfWeakPtr->TriggerOutput(Continue, true);
 			}
 			else
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Dialog Option %i"), ChosenOption)
 				SelfWeakPtr->TriggerOutput(SelfWeakPtr->OutputPins[ChosenOption].PinName, true);
 			}
 		}

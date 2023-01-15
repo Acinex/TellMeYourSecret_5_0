@@ -35,8 +35,6 @@ void UCharacterAnimationInstance::NativeUpdateAnimation(const float DeltaSeconds
 		RightFootSurface = Character->RightFootSurface;
 		bIsSwimming = Character->GetMovementComponent()->IsSwimming();
 
-		UE_LOG(LogTemp, Warning, TEXT("Character->IKOffsetLeftFoot: %f"), *Character->IKOffsetLeftFoot.ToString())
-
 		if (Character->IKOffsetLeftFoot.IsNearlyZero())
 		{
 			if (USoundBase* Sound = SelectSurfaceSound(LeftFootSurface))

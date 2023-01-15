@@ -12,6 +12,7 @@ ACharacterBase::ACharacterBase(const FObjectInitializer& ObjectInitializer): Sup
 {
 	PrimaryActorTick.bCanEverTick = true;
 	Voice = CreateDefaultSubobject<UAudioComponent>(TEXT("Voice"));
+	Voice->SetupAttachment(GetMesh());
 
 	Pants = CreateDefaultSubobject<UClothComponent>(TEXT("Pants"));
 	Pants->SetClothSlot(EClothSlot::Pants);

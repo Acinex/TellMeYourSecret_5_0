@@ -6,6 +6,7 @@
 #include "TellMeYourSecret/Characters/Util/LipSyncUtil.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TellMeYourSecret/Log.h"
 
 ULipSyncExecutor::ULipSyncExecutor(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
 {
@@ -17,8 +18,8 @@ ULipSyncExecutor::ULipSyncExecutor(const FObjectInitializer& ObjectInitializer):
 void ULipSyncExecutor::Start(UCharacterComponent* InNonPlayerComponent, const FPlayDialogueStruct Struct)
 {
 	NonPlayerComponent = InNonPlayerComponent;
-	Data               = Struct;
-	UWorld* World      = GetWorld();
+	Data = Struct;
+	UWorld* World = GetWorld();
 
 	AudioComponent = NonPlayerComponent->GetOwner()->FindComponentByClass<UAudioComponent>();
 
@@ -28,6 +29,7 @@ void ULipSyncExecutor::Start(UCharacterComponent* InNonPlayerComponent, const FP
 		{
 			const FTimerDelegate TimerCallback = FTimerDelegate::CreateLambda([](UAudioComponent* AudioComponent, USoundBase* AudioTrack)
 			{
+				AudioComponent->Stop();
 				AudioComponent->SetSound(AudioTrack);
 				AudioComponent->Play();
 			}, AudioComponent, Data.Audio);
@@ -37,6 +39,8 @@ void ULipSyncExecutor::Start(UCharacterComponent* InNonPlayerComponent, const FP
 		}
 		else
 		{
+			UE_LOG(LogTellMeYourSecret, Log, TEXT("Changeing audio to %s"), *Data.Audio->GetName())
+			AudioComponent->Stop();
 			AudioComponent->SetSound(Data.Audio);
 			AudioComponent->Play();
 		}
@@ -111,8 +115,8 @@ void ULipSyncExecutor::FinishLetter()
 void ULipSyncExecutor::TriggerLetter()
 {
 	const FSyllable Syllable = Data.Syllables[SyllableIndex];
-	CurrentDelay             = Syllable.Duration;
-	StepsLeft                = MorphTargets.Num();
+	CurrentDelay = Syllable.Duration;
+	StepsLeft = MorphTargets.Num();
 
 	FName CurrentMorphTarget;
 
@@ -131,7 +135,7 @@ void ULipSyncExecutor::TriggerLetter()
 
 void ULipSyncExecutor::AddPause()
 {
-	StepsLeft                          = 1;
+	StepsLeft = 1;
 	const FTimerDelegate TimerCallback = FTimerDelegate::CreateUObject(this, &ULipSyncExecutor::FinishStep);
 
 	FTimerHandle TimerHandle;
