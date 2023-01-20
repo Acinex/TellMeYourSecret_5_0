@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 
 #include "Blueprint/UserWidget.h"
 
@@ -23,13 +24,15 @@ class USlider;
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class TELLMEYOURSECRET_API UOptionControlsWidget : public UUserWidget
+class TELLMEYOURSECRET_API UOptionControlsWidget : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 public:
 	explicit UOptionControlsWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void NativeOnInitialized() override;
+
+	virtual void NativeOnActivated() override;
 
 	virtual void NativeConstruct() override;
 

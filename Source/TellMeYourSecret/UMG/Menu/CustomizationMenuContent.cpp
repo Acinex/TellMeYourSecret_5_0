@@ -22,6 +22,12 @@ void UCustomizationMenuContent::NativeConstruct()
 	PlayerNameTextBox->SetText(FText::FromString(GameInstance->GetSettings()->PlayerName));
 }
 
+bool UCustomizationMenuContent::NativeOnHandleBackAction()
+{
+	DeactivateWidget();
+	return true;
+}
+
 void UCustomizationMenuContent::PlayerNameChanged(const FText& PlayerName, ETextCommit::Type CommitMethod)
 {
 	GameInstance->UpdatePlayerName(PlayerName.ToString());

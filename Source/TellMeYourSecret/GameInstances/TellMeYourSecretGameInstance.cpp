@@ -11,8 +11,6 @@
 #include "Blueprint/UserWidget.h"
 #include "Cinematics/CinematicsModule.h"
 #include "TellMeYourSecret/Characters/ReputationSystem.h"
-#include "Engine/AssetManager.h"
-#include "Engine/LevelStreaming.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Internationalization/Culture.h"
 #include "TellMeYourSecret/GameInstances/TimeManager.h"
@@ -23,6 +21,7 @@
 #include "TellMeYourSecret/Model/Save/TmysSaveGame.h"
 #include "TellMeYourSecret/UMG/LoadingScreen.h"
 #include "TellMeYourSecret/GameInstances/SaveGameAware.h"
+#include "TellMeYourSecret/UMG/Menu/UIBase.h"
 
 void UTellMeYourSecretGameInstance::Init()
 {
@@ -56,6 +55,16 @@ void UTellMeYourSecretGameInstance::Init()
 	{
 		Smartphone->SetSmartphoneData(GetSmartphoneData());
 	}
+}
+
+void UTellMeYourSecretGameInstance::PushMenu(TSubclassOf<UCommonActivatableWidget> ActivatableWidgetClass)
+{
+	BaseUiWidget->PushMenu(ActivatableWidgetClass);
+}
+
+UCommonActivatableWidget* UTellMeYourSecretGameInstance::PushPrompt(TSubclassOf<UCommonActivatableWidget> ActivatableWidgetClass)
+{
+	return BaseUiWidget->PushPrompt(ActivatableWidgetClass);
 }
 
 void UTellMeYourSecretGameInstance::BeginDestroy()
@@ -106,19 +115,18 @@ void UTellMeYourSecretGameInstance::PauseGame()
 	UGameplayStatics::SetGamePaused(this, true);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
-	if (!PauseMenuWidget && GameData->PauseMenuWidgetClass)
+	if (!BaseUiWidget && GameData->BaseUIWidgetClass)
 	{
-		PauseMenuWidget = CreateWidget<UUserWidget>(PlayerController, GameData->PauseMenuWidgetClass);
+		BaseUiWidget = CreateWidget<UUIBase>(PlayerController, GameData->BaseUIWidgetClass);
 	}
 
-	if (!PauseMenuWidget)
+	if (!BaseUiWidget)
 	{
-		UE_LOG(LogTellMeYourSecret, Error, TEXT("No Pause-Widget created"))
+		UE_LOG(LogTellMeYourSecret, Error, TEXT("No UI-Widget created"))
 		return;
 	}
 
-	PauseMenuWidget->AddToViewport();
-	PauseMenuWidget->SetVisibility(ESlateVisibility::Visible);
+	BaseUiWidget->AddToViewport();
 
 	const FInputModeGameAndUI Mode;
 	PlayerController->SetInputMode(Mode);
@@ -127,7 +135,7 @@ void UTellMeYourSecretGameInstance::PauseGame()
 
 void UTellMeYourSecretGameInstance::UnpauseGame()
 {
-	if (!PauseMenuWidget)
+	if (!BaseUiWidget)
 	{
 		UE_LOG(LogTellMeYourSecret, Error, TEXT("No Pause-Widget created"))
 		return;
@@ -136,10 +144,11 @@ void UTellMeYourSecretGameInstance::UnpauseGame()
 	UGameplayStatics::SetGamePaused(this, false);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
-	PauseMenuWidget->RemoveFromParent();
 	const FInputModeGameOnly Mode;
 	PlayerController->SetInputMode(Mode);
 	PlayerController->bShowMouseCursor = false;
+	BaseUiWidget->RemoveFromParent();
+	BaseUiWidget = nullptr;
 }
 
 void UTellMeYourSecretGameInstance::TogglePause()
@@ -157,6 +166,11 @@ void UTellMeYourSecretGameInstance::TogglePause()
 bool UTellMeYourSecretGameInstance::IsPaused() const
 {
 	return UGameplayStatics::IsGamePaused(this);
+}
+
+void UTellMeYourSecretGameInstance::LoadComplete(const float LoadTime, const FString& MapName)
+{
+	StartGame();
 }
 
 void UTellMeYourSecretGameInstance::UpdateVolume(const EVolumeType VolumeType, const float Volume) const
@@ -273,7 +287,8 @@ void UTellMeYourSecretGameInstance::BeforeSave(const FString SlotName) const
 void UTellMeYourSecretGameInstance::StartGame()
 {
 	const FInputModeGameOnly Mode;
-	GetWorld()->GetFirstPlayerController()->SetInputMode(Mode);
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	PlayerController->SetInputMode(Mode);
 }
 
 void UTellMeYourSecretGameInstance::UpdatePlayerName(FString PlayerName) const

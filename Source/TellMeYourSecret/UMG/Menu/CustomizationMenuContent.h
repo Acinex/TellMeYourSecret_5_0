@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 
 #include "Blueprint/UserWidget.h"
 #include "CustomizationMenuContent.generated.h"
@@ -13,13 +14,15 @@ class UEditableTextBox;
  * 
  */
 UCLASS()
-class TELLMEYOURSECRET_API UCustomizationMenuContent : public UUserWidget
+class TELLMEYOURSECRET_API UCustomizationMenuContent : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 public:
 	virtual void NativeOnInitialized() override;
 
 	virtual void NativeConstruct() override;
+
+	virtual bool NativeOnHandleBackAction() override;
 
 protected:
 	UPROPERTY(meta=(BindWidget))

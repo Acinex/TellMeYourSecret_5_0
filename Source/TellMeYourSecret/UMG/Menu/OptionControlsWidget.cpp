@@ -81,6 +81,13 @@ void UOptionControlsWidget::NativeOnInitialized()
 	// ApplyButton->OnClicked.AddDynamic(this, &UOptionControlsWidget::ApplySettings);
 }
 
+void UOptionControlsWidget::NativeOnActivated()
+{
+	Super::NativeOnActivated();
+	
+	GetDesiredFocusTarget()->SetFocus();
+}
+
 void UOptionControlsWidget::NativeConstruct()
 {
 	Super::NativeConstruct();

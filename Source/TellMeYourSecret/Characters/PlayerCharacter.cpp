@@ -19,6 +19,7 @@
 #include "TellMeYourSecret/Smartphone/Screen/ScreenWidget.h"
 #include "TellMeYourSecret/Smartphone/SmartphoneMesh.h"
 #include "TellMeYourSecret/Log.h"
+#include "TellMeYourSecret/GameInstances/TellMeYourSecretGameInstance.h"
 #include "TellMeYourSecret/UMG/HeadsUpDisplay.h"
 
 class IDlgDialogueParticipant;
@@ -179,7 +180,8 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	UE_LOG(LogTellMeYourSecret, Log, TEXT("PossessedBy PlayerCharacter"))
+	GetGameInstance<UTellMeYourSecretGameInstance>()->StartGame();
+
 	if (HeadsUpDisplayClass)
 	{
 		APlayerController* PlayerController = GetController<APlayerController>();

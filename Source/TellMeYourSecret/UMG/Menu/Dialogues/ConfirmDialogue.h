@@ -4,21 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
 #include "TellMeYourSecret/UMG/TMYSButton.h"
 #include "ConfirmDialogue.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FResponse, bool, Result);
 
+class UUIBase;
 /**
  * 
  */
 UCLASS()
-class TELLMEYOURSECRET_API UConfirmDialogue : public UUserWidget
+class TELLMEYOURSECRET_API UConfirmDialogue : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 
 public:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeOnActivated() override;
+	virtual UWidget* NativeGetDesiredFocusTarget() const override;
+
+	UFUNCTION(BlueprintCallable)
+	void Setup(FText InTitle, FText InMessage, UUIBase* InOwner, int32 InIndex);
 
 	UPROPERTY(BlueprintReadOnly)
 	FText Title;
@@ -36,6 +43,11 @@ protected:
 	UTMYSButton* CancelButton;
 	UPROPERTY(meta=(BindWidget))
 	UTMYSButton* ConfirmButton;
+
+	UPROPERTY()
+	UUIBase* Owner;
+
+	int32 Index;
 
 	UFUNCTION()
 	virtual void Cancel();

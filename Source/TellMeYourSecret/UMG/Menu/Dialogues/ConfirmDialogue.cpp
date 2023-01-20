@@ -2,6 +2,8 @@
 
 #include "ConfirmDialogue.h"
 
+#include "TellMeYourSecret/UMG/Menu/UIBase.h"
+
 void UConfirmDialogue::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -12,14 +14,34 @@ void UConfirmDialogue::NativeOnInitialized()
 	CommonButtonEvent.AddUFunction(this, "Confirm");
 }
 
+void UConfirmDialogue::NativeOnActivated()
+{
+	Super::NativeOnActivated();
+
+	GetDesiredFocusTarget()->SetFocus();
+}
+
+UWidget* UConfirmDialogue::NativeGetDesiredFocusTarget() const
+{
+	return ConfirmButton;
+}
+
+void UConfirmDialogue::Setup(FText InTitle, FText InMessage, UUIBase* InOwner, int32 InIndex)
+{
+	Title = InTitle;
+	Message = InMessage;
+	Owner = InOwner;
+	Index = InIndex;
+}
+
 void UConfirmDialogue::Cancel()
 {
-	RemoveFromParent();
+	DeactivateWidget();
 	OnResponse.Broadcast(false);
 }
 
 void UConfirmDialogue::Confirm()
 {
-	RemoveFromParent();
+	DeactivateWidget();
 	OnResponse.Broadcast(true);
 }
