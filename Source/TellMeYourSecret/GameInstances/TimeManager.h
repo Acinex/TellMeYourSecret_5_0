@@ -13,7 +13,7 @@ class TELLMEYOURSECRET_API UTimeManager : public UGameInstanceSubsystem, public 
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(UIMax=60))
 	float InGameSecondsPerSecond = 60.0F;
 
 	UFUNCTION(BlueprintCallable)

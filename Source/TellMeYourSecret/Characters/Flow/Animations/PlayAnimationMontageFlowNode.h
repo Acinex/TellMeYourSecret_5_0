@@ -22,8 +22,17 @@ public:
 	virtual void ExecuteInput(const FName& PinName) override;
 
 #if WITH_EDITOR
-	virtual bool          SupportsContextPins() const override { return true; }
-	virtual TArray<FName> GetContextOutputs() override { return Notifies; }
+	virtual bool SupportsContextPins() const override { return true; }
+
+	virtual TArray<FFlowPin> GetContextOutputs() override
+	{
+		TArray<FFlowPin> Pins = {};
+		for (FName Name : Notifies)
+			Pins.Emplace(Name);
+
+		return Pins;
+	}
+
 	virtual UObject* GetAssetToEdit() override;
 #endif
 
