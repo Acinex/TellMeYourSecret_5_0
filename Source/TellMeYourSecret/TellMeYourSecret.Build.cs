@@ -8,6 +8,7 @@ public class TellMeYourSecret : ModuleRules
 	{
 		bUseUnity = false;
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		CppStandard = CppStandardVersion.Cpp20;
 
 		PublicDependencyModuleNames.AddRange(new[]
 		{
