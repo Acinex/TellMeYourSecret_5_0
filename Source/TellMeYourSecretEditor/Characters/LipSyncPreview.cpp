@@ -7,6 +7,7 @@
 #include "TellMeYourSecret/Characters/NonPlayerComponent.h"
 #include "TellMeYourSecret/Characters/Util/LipSyncExecutor.h"
 #include "Kismet/GameplayStatics.h"
+#include "PropertyEditor/Public/IDetailsView.h"
 
 const FString ULipSyncPreview::SaveName = TEXT("LipSyncPreview");
 
@@ -23,10 +24,14 @@ void ULipSyncPreview::NativeOnInitialized()
 		PreviewData = NewObject<ULipSyncPreviewData>(this);
 	}
 
-	if (DetailsView)
-	{
-		DetailsView->SetObject(PreviewData);
-	}
+	FDetailsViewArgs Args;
+	Args.bHideSelectionTip = true;
+	Args.bShowPropertyMatrixButton = false;
+	Args.DefaultsOnlyVisibility = EEditDefaultsOnlyNodeVisibility::Hide;
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	DetailsView = PropertyModule.CreateDetailView(Args);
+
+	DetailsView->SetObject(PreviewData);
 
 	if (PlayButton)
 	{

@@ -20,6 +20,8 @@ struct FLoadingScreenBrush : FSlateDynamicImageBrush, FGCObject
 	{
 		FSlateBrush::AddReferencedObjects(Collector);
 	}
+
+	virtual FString GetReferencerName() const override;
 };
 
 class SLoadingScreen : public SCompoundWidget

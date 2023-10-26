@@ -9,11 +9,11 @@
 #include "Components/Button.h"
 #include "Components/Slider.h"
 #include "GameFramework/SaveGame.h"
-#include "UMGEditor/Public/Components/DetailsView.h"
 
 #include "LipSyncPreview.generated.h"
 
 class ULipSyncExecutor;
+class IDetailsView;
 
 UCLASS(BlueprintType)
 class ULipSyncPreviewData : public USaveGame
@@ -50,8 +50,7 @@ public:
 	virtual void NativeOnInitialized() override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UDetailsView* DetailsView;
+	TSharedRef<class IDetailsView> DetailsView;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UButton* PlayButton;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
