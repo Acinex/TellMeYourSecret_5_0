@@ -2,7 +2,7 @@
 
 #include "PlayerAnimation.h"
 
-#include "AnimGraphRuntime/Public/KismetAnimationLibrary.h"
+#include "KismetAnimationLibrary.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"

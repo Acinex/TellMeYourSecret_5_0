@@ -8,7 +8,7 @@ public class TellMeYourSecretEditorTarget : TargetRules
 	public TellMeYourSecretEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.V4;
 		ExtraModuleNames.AddRange( new string[] { "TellMeYourSecret", "TellMeYourSecretEditor" } );
 	}
 }

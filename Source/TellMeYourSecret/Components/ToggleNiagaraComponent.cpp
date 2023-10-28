@@ -1,7 +1,7 @@
 ﻿// Copyright Acinex Games 2020
 
 #include "ToggleNiagaraComponent.h"
-#include "Niagara/Public/NiagaraComponent.h"
+#include "NiagaraComponent.h"
 
 UToggleNiagaraComponent::UToggleNiagaraComponent()
 {
